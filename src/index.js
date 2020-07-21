@@ -3,7 +3,7 @@ const path = require('path');
 const ipcMain = require('electron').ipcMain;
 const Sequelize = require('sequelize');
 const { Op } = require("sequelize");
-const { user_table } = require('./sequelize');
+const { user_table, trx_table, parameter_table } = require('./sequelize');
 
 // Handle creating/removing shortcuts on Windows when installing/uninstalling.
 if (require('electron-squirrel-startup')) { // eslint-disable-line global-require
@@ -51,12 +51,117 @@ app.on('activate', () => {
 });
 
 
-ipcMain.on('do_login', function (event, data) {
-  mainWindow.loadFile(path.join(__dirname, 'admin.html'))
+ipcMain.on('doLogin', function (event, userId, userPin) {
+  user_table.findAll({
+    where: {
+      [Op.and]: [
+        {
+          idlogin_kartu: {
+            [Op.eq]: userId
+          }
+        },
+        {
+          pin_kartu: {
+            [Op.eq]: userPin
+          }
+        }
+      ]
+    }
+  }).then(user_table_find => {
+    if (user_table_find.length > 0) {
+      mainWindow.loadFile(path.join(__dirname, 'admin.html'))
+    } else {
+      mainWindow.webContents.send('doLogin', false);
+    }
+  })
 });
+
+ipcMain.on('doUserIdValidate', function (event, userId) {
+  user_table.findAll({
+    where: {
+      idlogin_kartu: userId
+    }
+  }).then(user_table_find => {
+    if (user_table_find.length > 0) {
+      mainWindow.webContents.send('doUserIdValidate', true);
+    } else {
+      mainWindow.webContents.send('doUserIdValidate', false);
+    }
+  })
+})
+
+ipcMain.on('getUserList', function (event, data) {
+  user_table.findAll().then(user_table_all => {
+    mainWindow.webContents.send('getUserList', user_table_all);
+  })
+});
+
+ipcMain.on('saveOpeningSaldo', function (event, userId, openingSaldo) {
+  user_table.update({
+    max_beras: openingSaldo
+  }, {
+    where: {
+      id: userId
+    }
+  }).then(user_table_update => {
+    mainWindow.webContents.send('saveOpeningSaldo', true);
+  })
+})
+
+ipcMain.on('savePin', function (event, userId, newPin) {
+  user_table.update({
+    pin_kartu: newPin
+  }, {
+    where: {
+      id: userId
+    }
+  }).then(user_table_update => {
+    mainWindow.webContents.send('savePin', true);
+  })
+})
 
 ipcMain.on('adminDone', function (event, data) {
   mainWindow.loadFile(path.join(__dirname, 'index.html'))
+});
+
+
+ipcMain.on('showParameter', function (event, data) {
+  parameter_table.findAll().then(parameter_table_all => {
+    mainWindow.webContents.send('showParameter', parameter_table_all);
+  })
+})
+
+ipcMain.on('saveParameter', function (event, parameter) {
+  parameter_table.findAll().then(parameter_table_all => {
+    if (parameter_table_all.length > 0) {
+      let parameterId = parameter_table_all[0].dataValues.id;
+      parameter_table.update(
+        parameter,
+        {
+          where: {
+            id: parameterId
+          }
+        }).then(parameter_table_update => {
+          mainWindow.webContents.send('saveParameter', true);
+        })
+    } else {
+      parameter_table.create(parameter).then(parameter_table_create => {
+        mainWindow.webContents.send('saveParameter', true);
+      });
+    }
+  });
+});
+
+ipcMain.on('showTrx', function (event, data) {
+  trx_table.findAll().then(trx_table_all => {
+    mainWindow.webContents.send('showTrx', trx_table_all);
+  });
+});
+
+ipcMain.on('saveTrx', function (event, trx) {
+  trx_table.create(trx).then(trx_table_create => {
+    mainWindow.webContents.send('saveTrx', true);
+  });
 });
 
 ipcMain.on('saveUser', function (event, user) {
@@ -97,6 +202,37 @@ ipcMain.on('editUser', function (event, id) {
     }
   }).then(user_table_find => {
     mainWindow.webContents.send('editUser', user_table_find);
+  })
+})
+
+ipcMain.on('editTrx', function (event, id) {
+  trx_table.findAll({
+    where: {
+      id: id
+    }
+  }).then(trx_table_find => {
+    mainWindow.webContents.send('editTrx', trx_table_find);
+  })
+})
+
+ipcMain.on('findTrx', function (event, parameter) {
+  trx_table.findAll({
+    where: {
+      [Op.or]: [
+        {
+          trx_id: {
+            [Op.like]: '%' + parameter + '%'
+          }
+        },
+        {
+          trx_name: {
+            [Op.like]: '%' + parameter + '%'
+          }
+        }
+      ]
+    }
+  }).then(trx_table_find => {
+    mainWindow.webContents.send('findTrx', trx_table_find);
   })
 })
 

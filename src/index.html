@@ -13,35 +13,65 @@
 	<style type="text/css">
 		body {
 		    min-width: -webkit-fill-available;
+		    background-color: darkgrey;
+		}
+
+		.button_login_form {
+			width: 40%;
+			margin-top: 20px;
+		}
+
+		.input_login_form {
+			width: 40%;
+			margin: 0 auto;
+		}
+
+		.main_row {
+			margin-top: 100px;
+		}
+
+		.login_form_div {
+			float: left;
+			text-align: center;
+		}
+
+		.error_id {
+			color: red;
+		}
+
+		.error_pin {
+			color: red;
 		}
 	</style>
   </head>
   <body>
-    <div class="row" style="margin-top: 100px;">
+    <div class="row main_row">
     	<div class="col-md-6">
     		<img src="images/yanas.png" alt="Yanas" style="float: right;">
     	</div>
 	    	<div class="col-md-6">
 	    		<div id="user_id_form">
-		    		<div style="float: left; text-align: center;">
+		    		<div class="login_form_div">
 			    		<label id="date_label"></label>
 			    		<h3>Selamat Datang di ATM Beras</h3>
 			    		&nbsp;
 			    		<h4>Silahkan tempelkan kartu anda</h4>
 			    		<h4>User ID</h4>
-			    		<input type="text" name="id_input" id="id_input" class="form-control" style="width: 40%; margin: 0 auto;">
-			    		<input type="button" class="btn btn-primary" name="id_login" id="id_login" value="Masuk" class="form-control" style="width: 40%; margin-top: 20px;" onclick="doAdminLogin()">
+			    		<input type="text" name="id_input" id="id_input" class="form-control input_login_form" >
+			    		<h6 class="error_id">User ID tidak terdaftar</h6>
+			    		<input type="button" class="btn btn-primary button_login_form" name="id_login" id="id_login" value="Masuk" class="form-control" onclick="doAdminLogin()">
 		    		</div>
 		    	</div>
     			<div id="user_pin_form">
-		    		<div style="float: left; text-align: center;">
+		    		<div class="login_form_div">
 			    		<label id="date_label"></label>
 			    		<h3>Selamat Datang Admin</h3>
 			    		&nbsp;
 			    		<h4>Silahkan masukan PIN anda</h4>
-			    		<input type="text" name="id_input" id="id_input" class="form-control" style="width: 40%; margin: 0 auto;">
-			    		<input type="button" class="btn btn-primary" name="id_login" id="id_login" value="Masuk" class="form-control" style="width: 40%; margin-top: 20px;" onclick="doPinLogin()">
-			    		<input type="button" class="btn btn-primary" name="id_login" id="id_login" value="Batal" class="form-control" style="width: 40%; margin-top: 20px;" onclick="cancelLogin()">
+			    		<input type="text" name="pin_input" id="pin_input" class="form-control input_login_form" >
+			    		<h6 class="error_pin">Pin salah</h6>
+			    		<input type="button" class="btn btn-primary button_login_form" name="id_login" id="id_login" value="Masuk" class="form-control" onclick="doPinLogin()">
+			    		<input type="button" class="btn btn-primary button_login_form" name="id_login" id="id_login" value="Batal" class="form-control" onclick="cancelLogin()">
 		    		</div>
 		    	</div>
 	    	</div>
@@ -64,48 +94,44 @@
 
   	$('#user_id_form').show()
   	$('#user_pin_form').hide()
-
+  	$('.error_pin').hide()
+  	$('.error_id').hide()
 
   	function doAdminLogin () {
-	  	$('#user_id_form').hide()
-	  	$('#user_pin_form').show()
+  		var inputUserId = $('#id_input').val();
+  		$('.error_id').hide()
+  		if (inputUserId == '') {
+  			$('.error_id').show()
+  		} else {
+  			ipcRenderer.send('doUserIdValidate', inputUserId);
+  		}
   	}
+
+  	ipcRenderer.on('doUserIdValidate', function (event, userFound) {
+  		if (userFound) {
+		  	$('#user_id_form').hide()
+		  	$('#user_pin_form').show()
+  		} else {
+  			$('.error_id').show()
+  		}
+  	})
 
   	function doPinLogin () {
-  		console.log('pin login')
-        ipcRenderer.send('do_login', false);
+  		var inputUserId = $('#id_input').val();
+  		var inputUserPin = $('#pin_input').val();
+        ipcRenderer.send('doLogin', inputUserId, inputUserPin);
   	}
+
+  	ipcRenderer.on('doLogin', function (event, userFound) {
+  		if (!userFound) {
+  			$('.error_pin').show()
+  		}
+  	})
 
   	function cancelLogin () {
-  		console.log('cancel login')
+	  	$('#user_id_form').show()
+	  	$('#user_pin_form').hide()
   	}
 
-
-
-
-
-
-
-
- //  	var availableTags = ["ActionScript", "AppleScript", "Asp", "BASIC", "C", "C++", "Clojure",
-	// 	"COBOL", "ColdFusion", "Erlang", "Fortran", "Groovy", "Haskell", "Java", "JavaScript",
-	// 	"Lisp", "Perl", "PHP", "Python", "Ruby", "Scala", "Scheme" ];
-
-	// $('#id_input')
-	// 	.keyboard({ layout: 'qwerty' })
-	// 	.autocomplete({
-	// 		source: availableTags
-	// 	})
-	// 	// position options added after v1.23.4
-	// 	.addAutocomplete({
-	// 		position : {
-	// 			of : null,        // when null, element will default to kb.$keyboard
-	// 			my : 'right top', // 'center top', (position under keyboard)
-	// 			at : 'left top',  // 'center bottom',
-	// 			collision: 'flip'
-	// 		}
-	// 	})
-	// 	.addTyping();
-  	// console.log(newDate)
   </script>
 </html>

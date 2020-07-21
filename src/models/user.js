@@ -9,6 +9,8 @@ module.exports = (sequelize, type) => {
         idlogin_kartu: type.STRING(100),
         nama_kartu: type.STRING(100),
         pin_kartu: type.STRING(100),
-        role_kartu: type.STRING(100)
-    })
+        role_kartu: type.STRING(100),
+        max_beras: type.INTEGER,
+        daily_counter: type.INTEGER
+    });
 }

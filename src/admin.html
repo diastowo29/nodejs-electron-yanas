@@ -20,85 +20,156 @@
 			margin-top: 20px;
 		}
 
+        .ctn {
+            position: fixed;
+            min-width: -webkit-fill-available;
+            margin-left: auto;
+            margin-right: auto;
+            text-align: center;
+            display: table-cell;
+            vertical-align: middle 
+        }
+
+        .float_left {
+            float: left;
+        }
+
+        .float_right {
+            float: right;
+        }
+
+        .hidethis {
+            visibility: hidden;
+        }
+
+        .table_user {
+            margin: 10px 10px;
+        }
+
 	</style>
   </head>
   <body>
     <div class="row" style="margin-top: 100px;">
+        <div class="ctn">
+    		<img src="images/yanas.png" alt="Yanas">
+        </div>
+        <div class="col-md-6">
+            <input type="button" class="btn btn-primary main_menu float_left" name="id_login" id="id_login" value="User" class="form-control" onclick="userClick()">
+        </div>
+        <div class="col-md-6">
+            <input type="button" class="btn btn-primary main_menu float_right" name="id_login" id="id_login" value="Parameter" class="form-control" onclick="parameterClick()">
+        </div>
+        <div class="col-md-6">
+            <input type="button" class="btn btn-primary main_menu float_left" name="id_login" id="id_login" value="Opening Saldo" class="form-control" onclick="openingSaldoClick()">
+        </div>
+        <div class="col-md-6">
+            <input type="button" class="btn btn-primary main_menu float_right" name="id_login" id="id_login" value="Ubah Pin" class="form-control" onclick="changePinClick()">
+        </div>
+        <div class="col-md-6">
+            <input type="button" class="btn btn-primary main_menu float_left" name="id_login" id="id_login" value="History" class="form-control" onclick="historyClick()">
+        </div>
+        <div class="col-md-6">
+            <input type="button" class="btn btn-primary main_menu float_right" name="id_login" id="id_login" value="Selesai" class="form-control" onclick="doneCLick()">
+        </div>
+        
     	<div class="col-md-6">
-    		<img src="images/yanas.png" alt="Yanas" style="float: right;">
-    	</div>
-	    	<div class="col-md-6">
-    			<div id="admin_main_menu">
-		    		<div style="float: left; text-align: center;">
-			    		<input type="button" class="btn btn-primary main_menu" name="id_login" id="id_login" value="User" class="form-control" onclick="userClick()">
-			    		<input type="button" class="btn btn-primary main_menu" name="id_login" id="id_login" value="Parameter" class="form-control" onclick="parameterClick()">
-			    		<input type="button" class="btn btn-primary main_menu" name="id_login" id="id_login" value="Transaksi" class="form-control" onclick="TrxClick()">
-			    		<input type="button" class="btn btn-primary main_menu" name="id_login" id="id_login" value="Opening Saldo" class="form-control" onclick="saldoClick()">
-			    		<input type="button" class="btn btn-primary main_menu" name="id_login" id="id_login" value="Ubah Pin" class="form-control" onclick="changePinClick()">
-			    		<input type="button" class="btn btn-primary main_menu" name="id_login" id="id_login" value="History" class="form-control" onclick="historyClick()">
-			    		<input type="button" class="btn btn-primary main_menu" name="id_login" id="id_login" value="Selesai" class="form-control" onclick="doneCLick()">
-		    		</div>
-		    	</div>
-    			<div id="user_menu" class="row">
-    				<div class="col-md-2">
-    					<input type="button" class="btn btn-info" name="new" value="New" style="width: 100%;" onclick="doNewUser()">
-    				</div>
-    				<div class="col-md-8">
-    					<input type="button" class="btn btn-info" name="done" value="Selesai" style="float: right;" onclick="doneAddUser()">
-    				</div>
-    				<div class="col-md-10">
-    					<input type="text" class="form-control" id="find_input" name="find_input" placeholder="User ID or Name">
-    				</div>
-    				<div class="col-md-2">
-    					<input type="button" class="btn btn-info" name="find" value="Find" style="width: 100%;" onclick="doFindUser()">
-    				</div>
-		    		<table class="table table-striped">
-		    			<thead>
-		    				<tr>
-		    					<th>ID</th>
-		    					<th>Name</th>
-		    					<th>Pin</th>
-		    					<th>Role</th>
-		    					<th>Edit</th>
-		    					<th>Delete</th>
-		    				</tr>
-		    			</thead>
-		    			<tbody id="user_list_table">
-		    				<tr>
-		    					<td>admin</td>
-		    					<td>Admin</td>
-		    					<td>1234</td>
-		    					<td>Full</td>
-		    					<td><input type="button" class="btn btn-info" name="edit" value="Edit"></td>
-		    					<td><input type="button" class="btn btn-warning" name="edit" value="Delete"></td>
-		    				</tr>
-		    				<tr>
-		    					<td>00001</td>
-		    					<td>Dias</td>
-		    					<td>322412</td>
-		    					<td>User</td>
-		    					<td><input type="button" class="btn btn-info" name="edit" value="Edit"></td>
-		    					<td><input type="button" class="btn btn-warning" name="edit" value="Delete"></td>
-		    				</tr>
-		    				<tr>
-		    					<td>00002</td>
-		    					<td>Ayu</td>
-		    					<td>456434</td>
-		    					<td>User</td>
-		    					<td><input type="button" class="btn btn-info" name="edit" value="Edit"></td>
-		    					<td><input type="button" class="btn btn-warning" name="edit" value="Delete"></td>
-		    				</tr>
-		    			</tbody>
-		    		</table>
-		    	</div>
+			<!-- <div id="admin_main_menu">
+	    		<div style="float: left; text-align: center;">
+		    		<input type="button" class="btn btn-primary main_menu" name="id_login" id="id_login" value="User" class="form-control" onclick="userClick()">
+		    		<input type="button" class="btn btn-primary main_menu" name="id_login" id="id_login" value="Parameter" class="form-control" onclick="parameterClick()">
+		    		<input type="button" class="btn btn-primary main_menu" name="id_login" id="id_login" value="Transaksi" class="form-control" onclick="TrxClick()">
+		    		<input type="button" class="btn btn-primary main_menu" name="id_login" id="id_login" value="Opening Saldo" class="form-control" onclick="saldoClick()">
+		    		<input type="button" class="btn btn-primary main_menu" name="id_login" id="id_login" value="Ubah Pin" class="form-control" onclick="changePinClick()">
+		    		<input type="button" class="btn btn-primary main_menu" name="id_login" id="id_login" value="History" class="form-control" onclick="historyClick()">
+		    		<input type="button" class="btn btn-primary main_menu" name="id_login" id="id_login" value="Selesai" class="form-control" onclick="doneCLick()">
+	    		</div>
+	    	</div> -->
+	    	<div id="trx_menu" class="row">
+				<div class="col-md-2">
+					<input type="button" class="btn btn-info" name="new" value="New" style="width: 100%;" onclick="doNewTrx()">
+				</div>
+				<div class="col-md-8">
+					<input type="button" class="btn btn-info" name="done" value="Selesai" style="float: right;" onclick="doneAddUser()">
+				</div>
+				<div class="col-md-10">
+					<input type="text" class="form-control" id="find_input_trx" name="find_input_trx" placeholder="Transaction ID or Name">
+				</div>
+				<div class="col-md-2">
+					<input type="button" class="btn btn-info" name="find" value="Find" style="width: 100%;" onclick="doFindTrx()">
+				</div>
+	    		<table class="table table-striped">
+	    			<thead>
+	    				<tr>
+	    					<th>Transaction ID</th>
+	    					<th>Transaction</th>
+	    					<th>Edit</th>
+	    					<th>Delete</th>
+	    				</tr>
+	    			</thead>
+	    			<tbody id="trx_list_table">
+	    				<tr>
+	    					<td>-</td>
+	    					<td>-</td>
+	    					<td>-</td>
+	    					<td>-</td>
+	    				</tr>
+	    			</tbody>
+	    		</table>
 	    	</div>
     	</div>
+	</div>
+
+    <!-- Modal User -->
+    <div class="modal fade" id="userListModal" role="dialog">
+        <div class="modal-dialog modal-lg">
+            <!-- Modal content-->
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 class="modal-title">User List</h4>
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                </div>
+                <div class="modal-body row">
+                    <div class="col-md-2">
+                        <input type="button" class="btn btn-info" name="new" value="New" style="width: 100%;" onclick="doNewUser()">
+                    </div>
+                    <div class="col-md-8">
+                        <input type="text" class="form-control" id="find_input" name="find_input" placeholder="User ID or Name">
+                    </div>
+                    <div class="col-md-2">
+                        <input type="button" class="btn btn-info" name="find" value="Find" style="width: 100%;" onclick="doFindUser()">
+                    </div>
+                    <table class="table table-striped table_user">
+                        <thead>
+                            <tr>
+                                <th>ID</th>
+                                <th>Name</th>
+                                <th>Pin</th>
+                                <th>Role</th>
+                                <th>Edit</th>
+                                <th>Delete</th>
+                            </tr>
+                        </thead>
+                        <tbody id="user_list_table">
+                            <tr>
+                                <td>-</td>
+                                <td>-</td>
+                                <td>-</td>
+                                <td>-</td>
+                                <td>-</td>
+                                <td>-</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
     </div>
-    <!-- Modal -->
 
-
-
-    <div class="modal fade" id="myModal" role="dialog">
+    <!-- Modal New User -->
+    <div class="modal fade" id="userModal" role="dialog">
         <div class="modal-dialog modal-lg">
             <!-- Modal content-->
             <div class="modal-content">
@@ -113,7 +184,7 @@
                     </div>
                     <div class="col-md-12"></div>
                     <div class="col-md-6">
-                        <label for="nama" class="">Nama</label>
+                        <label for="nama" class="">Name</label>
                         <input name="nama" id="nama" placeholder="Daffa" type="text" class="form-control">
                     </div>
                     <div class="col-md-12"></div>
@@ -139,6 +210,239 @@
                         <input name="save_user" id="save_user" type="button" class="btn btn-primary" value="Save" onclick="doSaveUser()">
                     </div>
                     <div class="col-md-12"></div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal TRX -->
+    <!-- <div class="modal fade" id="trxModal" role="dialog">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 class="modal-title">Add new Transaction..</h4>
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                </div>
+                <div class="modal-body">
+                    <div class="col-md-6">
+                        <label for="trx_id" class="">Transaction ID</label>
+                        <input name="trx_id" id="trx_id" placeholder="12" type="text" class="form-control">
+                    </div>
+                    <div class="col-md-12"></div>
+                    <div class="col-md-6">
+                        <label for="trx_name" class="">Transaction Name</label>
+                        <input name="trx_name" id="trx_name" placeholder="2 Liter" type="text" class="form-control">
+                    </div>
+                    <div class="col-md-12"></div>
+                    <div class="col-md-3">
+                        <input name="save_user" id="save_user" type="button" class="btn btn-primary" value="Save" onclick="doSaveTrx()">
+                    </div>
+                    <div class="col-md-12"></div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div> -->
+
+    <!-- Modal Change PIN -->
+    <div class="modal fade" id="pinModal" role="dialog">
+        <div class="modal-dialog modal-lg">
+            <!-- Modal content-->
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 class="modal-title">Change PIN</h4>
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                </div>
+                <div class="modal-body">
+                    <div class="col-md-6">
+                        <label for="pin_user_id" class="">User ID</label>
+                        <select class="form-control" id="user_list_pin_select"></select>
+                    </div>
+                    <div class="col-md-12"></div>
+                    <div class="col-md-6">
+                        <label for="old_pin" class="">Old Pin</label>
+                        <input name="old_pin" id="old_pin" type="password" class="form-control">
+                    </div>
+                    <div class="col-md-12"></div>
+                    <div class="col-md-6">
+                        <label for="new_pin" class="">New Pin</label>
+                        <input name="new_pin" id="new_pin" type="password" class="form-control">
+                    </div>
+                    <div class="col-md-12"></div>
+                    <div class="col-md-6">
+                        <label for="retype_pin" class="">Re-type Pin</label>
+                        <input name="retype_pin" id="retype_pin" type="password" class="form-control">
+                    </div>
+                    <div class="col-md-12"></div>
+                    <div class="col-md-3">
+                        <input name="save_user" id="save_user" type="button" class="btn btn-primary" value="Save" onclick="doSavePin()">
+                    </div>
+                    <div class="col-md-12"></div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal Parameter -->
+    <div class="modal fade" id="parameterModal" role="dialog">
+        <div class="modal-dialog modal-lg">
+            <!-- Modal content-->
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 class="modal-title">Parameter</h4>
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                </div>
+                <div class="modal-body">
+                    <div class="col-md-6">
+                        <label for="ip_atm" class="">IP ATM</label>
+                        <input name="ip_atm" id="ip_atm" placeholder="12" type="text" class="form-control">
+                    </div>
+                    <div class="col-md-12"></div>
+                    <div class="col-md-6">
+                        <label for="card_digit" class="">Jumlah Digit Kartu</label>
+                        <input name="card_digit" id="card_digit" type="number" class="form-control">
+                    </div>
+                    <div class="col-md-12"></div>
+                    <div class="col-md-6">
+                        <label for="max_beras_hari" class="">Max ambil beras / hari (L)</label>
+                        <input name="max_beras_hari" id="max_beras_hari" type="number" class="form-control">
+                    </div>
+                    <div class="col-md-12"></div>
+                    <div class="col-md-6">
+                        <label for="periode_beras" class="">Periode pengambilan beras (H)</label>
+                        <input name="periode_beras" id="periode_beras" type="number" class="form-control">
+                    </div>
+                    <div class="col-md-12"></div>
+                    <div class="col-md-6">
+                        <label for="max_beras_periode_l" class="">Max ambil beras / periode (L)</label>
+                        <input name="max_beras_periode_l" id="max_beras_periode_l" type="number" class="form-control">
+                    </div>
+                    <div class="col-md-12"></div>
+                    <div class="col-md-6">
+                        <label for="max_beras_periode_x" class="">Max ambil beras / periode (X)</label>
+                        <input name="max_beras_periode_x" id="max_beras_periode_x" type="number" class="form-control">
+                    </div>
+                    <div class="col-md-12">
+                        <label class="checkbox-inline">
+                            <input type="checkbox" id="auto_reload" value=""> Auto update (Isi ulang)
+                        </label>
+                    </div>
+                    <div class="col-md-6">
+                        <label for="auto_reload_day" class="">Tanggal auto update </label>
+                        <input name="auto_reload_day" id="auto_reload_day" type="number" class="form-control">
+                    </div>
+                    <div class="col-md-12"></div>
+                    <div class="col-md-6">
+                        <label for="auto_reload_volume" class="">Jumlah auto update (L) </label>
+                        <input name="auto_reload_volume" id="auto_reload_volume" type="number" class="form-control">
+                    </div>
+                    <div class="col-md-12"></div>
+                    <div class="col-md-3">
+                        <input name="save_user" id="save_user" type="button" class="btn btn-primary" value="Save" onclick="doSaveParameter()">
+                    </div>
+                    <div class="col-md-12"></div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal Opening Saldo -->
+    <div class="modal fade" id="openingModal" role="dialog">
+        <div class="modal-dialog modal-lg">
+            <!-- Modal content-->
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 class="modal-title">Opening Saldo</h4>
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                </div>
+                <div class="modal-body">
+                    <div class="col-md-6">
+                        <label for="opening_user_id" class="">User ID</label>
+                        <select class="form-control" id="user_list_select"></select>
+                    </div>
+                    <div class="col-md-12"></div>
+                    <div class="col-md-6">
+                        <label for="opening_saldo" class="">Saldo (Liter)</label>
+                        <input name="opening_saldo" id="opening_saldo" type="number" class="form-control">
+                    </div>
+                    <div class="col-md-12"></div>
+                    <div class="col-md-3">
+                        <input name="save_user" id="save_user" type="button" class="btn btn-primary" value="Save" onclick="doSaveOpeningSaldo()">
+                    </div>
+                    <div class="col-md-12"></div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal History -->
+    <div class="modal fade" id="historyModal" role="dialog">
+        <div class="modal-dialog modal-lg">
+            <!-- Modal content-->
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 class="modal-title">Riwayat Transaksi</h4>
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                </div>
+                <div class="modal-body row">
+                    <div class="col-md-4">
+                        <label for="history_user_id" class="">User ID</label>
+                        <select class="form-control" id="user_list_history_select"></select>
+                    </div>
+                    <div class="col-md-3">
+                        <label for="history_from" class="">Dari</label>
+                        <input name="history_from" id="history_from" type="date" class="form-control">
+                    </div>
+                    <div class="col-md-3">
+                        <label for="history_to" class="">Sampai</label>
+                        <input name="history_to" id="history_to" type="date" class="form-control">
+                    </div>
+                    <div class="col-md-2">
+                        <label for="run" class="hidethis">run</label>
+                        <input class="btn btn-default" type="button" name="run" value="Run">
+                    </div>
+                    <div class="col-md-12">
+                        <table class="table table-striped">
+                            <thead>
+                                <tr>
+                                    <th>User ID</th>
+                                    <th>Tanggal</th>
+                                    <th>Transaksi</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>-</td>
+                                    <td>-</td>
+                                    <td>-</td>
+                                </tr>
+                                <tr>
+                                    <td>-</td>
+                                    <td>-</td>
+                                    <td>-</td>
+                                </tr>
+                                <tr>
+                                    <td>-</td>
+                                    <td>-</td>
+                                    <td>-</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
