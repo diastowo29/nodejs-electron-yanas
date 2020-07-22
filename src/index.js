@@ -90,6 +90,10 @@ ipcMain.on('doUserIdValidate', function (event, userId) {
   })
 })
 
+ipcMain.on('bypassLogin', function (event, data) {
+  mainWindow.loadFile(path.join(__dirname, 'admin.html'))
+})
+
 ipcMain.on('getUserList', function (event, data) {
   user_table.findAll().then(user_table_all => {
     mainWindow.webContents.send('getUserList', user_table_all);

@@ -46,6 +46,10 @@
             margin: 10px 10px;
         }
 
+        .last_btn {
+            margin-top: 10px;
+        }
+
 	</style>
   </head>
   <body>
@@ -178,38 +182,32 @@
                     <button type="button" class="close" data-dismiss="modal">&times;</button>
                 </div>
                 <div class="modal-body">
-                    <div class="col-md-6">
+                    <div class="col-md-12">
                         <label for="user_id" class="">User ID</label>
                         <input name="user_id" id="user_id" placeholder="daffa02" type="text" class="form-control">
                     </div>
-                    <div class="col-md-12"></div>
-                    <div class="col-md-6">
+                    <div class="col-md-12">
                         <label for="nama" class="">Name</label>
                         <input name="nama" id="nama" placeholder="Daffa" type="text" class="form-control">
                     </div>
-                    <div class="col-md-12"></div>
-                    <div class="col-md-6">
+                    <div class="col-md-12">
                         <label for="user_pin" class="">Pin</label>
                         <input name="user_pin" id="user_pin" placeholder="6 Digit Pin" type="password" class="form-control">
                     </div>
-                    <div class="col-md-12"></div>
-                    <div class="col-md-6">
+                    <div class="col-md-12">
                         <label for="user_repin" class="">Retype Pin</label>
                         <input name="user_repin" id="user_repin" placeholder="6 Digit Pin" type="password" class="form-control">
                     </div>
-                    <div class="col-md-12"></div>
-                    <div class="col-md-6">
+                    <div class="col-md-12">
                         <label for="user_type" class="">Type</label>
                         <select class="form-control" id="user_type">
                             <option value="Admin">Admin</option>
                             <option value="User">User</option>
                         </select>
                     </div>
-                    <div class="col-md-12"></div>
                     <div class="col-md-3">
-                        <input name="save_user" id="save_user" type="button" class="btn btn-primary" value="Save" onclick="doSaveUser()">
+                        <input name="save_user" id="save_user" type="button" class="btn btn-primary last_btn" value="Save" onclick="doSaveUser()">
                     </div>
-                    <div class="col-md-12"></div>
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
@@ -259,28 +257,24 @@
                     <button type="button" class="close" data-dismiss="modal">&times;</button>
                 </div>
                 <div class="modal-body">
-                    <div class="col-md-6">
+                    <div class="col-md-12">
                         <label for="pin_user_id" class="">User ID</label>
                         <select class="form-control" id="user_list_pin_select"></select>
                     </div>
-                    <div class="col-md-12"></div>
-                    <div class="col-md-6">
+                    <div class="col-md-12">
                         <label for="old_pin" class="">Old Pin</label>
                         <input name="old_pin" id="old_pin" type="password" class="form-control">
                     </div>
-                    <div class="col-md-12"></div>
-                    <div class="col-md-6">
+                    <div class="col-md-12">
                         <label for="new_pin" class="">New Pin</label>
                         <input name="new_pin" id="new_pin" type="password" class="form-control">
                     </div>
-                    <div class="col-md-12"></div>
-                    <div class="col-md-6">
+                    <div class="col-md-12">
                         <label for="retype_pin" class="">Re-type Pin</label>
                         <input name="retype_pin" id="retype_pin" type="password" class="form-control">
                     </div>
-                    <div class="col-md-12"></div>
                     <div class="col-md-3">
-                        <input name="save_user" id="save_user" type="button" class="btn btn-primary" value="Save" onclick="doSavePin()">
+                        <input name="save_user" id="save_user" type="button" class="btn btn-primary last_btn" value="Save" onclick="doSavePin()">
                     </div>
                     <div class="col-md-12"></div>
                 </div>
@@ -301,32 +295,27 @@
                     <button type="button" class="close" data-dismiss="modal">&times;</button>
                 </div>
                 <div class="modal-body">
-                    <div class="col-md-6">
+                    <div class="col-md-12">
                         <label for="ip_atm" class="">IP ATM</label>
                         <input name="ip_atm" id="ip_atm" placeholder="12" type="text" class="form-control">
                     </div>
-                    <div class="col-md-12"></div>
-                    <div class="col-md-6">
+                    <div class="col-md-12">
                         <label for="card_digit" class="">Jumlah Digit Kartu</label>
                         <input name="card_digit" id="card_digit" type="number" class="form-control">
                     </div>
-                    <div class="col-md-12"></div>
-                    <div class="col-md-6">
+                    <div class="col-md-12">
                         <label for="max_beras_hari" class="">Max ambil beras / hari (L)</label>
                         <input name="max_beras_hari" id="max_beras_hari" type="number" class="form-control">
                     </div>
-                    <div class="col-md-12"></div>
-                    <div class="col-md-6">
+                    <div class="col-md-12">
                         <label for="periode_beras" class="">Periode pengambilan beras (H)</label>
                         <input name="periode_beras" id="periode_beras" type="number" class="form-control">
                     </div>
-                    <div class="col-md-12"></div>
-                    <div class="col-md-6">
+                    <div class="col-md-12">
                         <label for="max_beras_periode_l" class="">Max ambil beras / periode (L)</label>
                         <input name="max_beras_periode_l" id="max_beras_periode_l" type="number" class="form-control">
                     </div>
-                    <div class="col-md-12"></div>
-                    <div class="col-md-6">
+                    <div class="col-md-12">
                         <label for="max_beras_periode_x" class="">Max ambil beras / periode (X)</label>
                         <input name="max_beras_periode_x" id="max_beras_periode_x" type="number" class="form-control">
                     </div>
@@ -335,20 +324,17 @@
                             <input type="checkbox" id="auto_reload" value=""> Auto update (Isi ulang)
                         </label>
                     </div>
-                    <div class="col-md-6">
+                    <div class="col-md-12">
                         <label for="auto_reload_day" class="">Tanggal auto update </label>
                         <input name="auto_reload_day" id="auto_reload_day" type="number" class="form-control">
                     </div>
-                    <div class="col-md-12"></div>
-                    <div class="col-md-6">
+                    <div class="col-md-12">
                         <label for="auto_reload_volume" class="">Jumlah auto update (L) </label>
                         <input name="auto_reload_volume" id="auto_reload_volume" type="number" class="form-control">
                     </div>
-                    <div class="col-md-12"></div>
                     <div class="col-md-3">
-                        <input name="save_user" id="save_user" type="button" class="btn btn-primary" value="Save" onclick="doSaveParameter()">
+                        <input name="save_user" id="save_user" type="button" class="btn btn-primary last_btn" value="Save" onclick="doSaveParameter()">
                     </div>
-                    <div class="col-md-12"></div>
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
@@ -367,18 +353,18 @@
                     <button type="button" class="close" data-dismiss="modal">&times;</button>
                 </div>
                 <div class="modal-body">
-                    <div class="col-md-6">
+                    <div class="col-md-12">
                         <label for="opening_user_id" class="">User ID</label>
                         <select class="form-control" id="user_list_select"></select>
                     </div>
                     <div class="col-md-12"></div>
-                    <div class="col-md-6">
+                    <div class="col-md-12">
                         <label for="opening_saldo" class="">Saldo (Liter)</label>
                         <input name="opening_saldo" id="opening_saldo" type="number" class="form-control">
                     </div>
                     <div class="col-md-12"></div>
                     <div class="col-md-3">
-                        <input name="save_user" id="save_user" type="button" class="btn btn-primary" value="Save" onclick="doSaveOpeningSaldo()">
+                        <input name="save_user" id="save_user" type="button" class="btn btn-primary last_btn" value="Save" onclick="doSaveOpeningSaldo()">
                     </div>
                     <div class="col-md-12"></div>
                 </div>
@@ -413,7 +399,7 @@
                     </div>
                     <div class="col-md-2">
                         <label for="run" class="hidethis">run</label>
-                        <input class="btn btn-default" type="button" name="run" value="Run">
+                        <input class="btn btn-default" type="button" name="run" value="Lihat">
                     </div>
                     <div class="col-md-12">
                         <table class="table table-striped">

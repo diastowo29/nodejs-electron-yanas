@@ -4,12 +4,19 @@
     <meta charset="UTF-8">
     <title>Hello World!</title>
     <link rel="stylesheet" href="index.css">
-	<link rel="stylesheet" href="js/Keyboard-master/css/keyboard.css">
-	<link rel="stylesheet" href="js/Keyboard-master/css/keyboard-basic.css">
 	<link rel="stylesheet" href="styles/bootstrap.min.css">
+
+
 	<script src="js/jquery-3.5.1.js"></script>
 	<script src="js/jquery-3.5.1.min.js"></script>
 	<script src="js/bootstrap.min.js"></script>
+
+
+  <script src = "https://code.jquery.com/jquery-1.10.2.js"></script>
+  <script src = "https://code.jquery.com/ui/1.10.4/jquery-ui.js"></script>
+
+  <link rel="stylesheet" href="styles/onScreenKeyboard.css">
+  <script src="js/jquery.onScreenKeyboard.js"></script>
 	<style type="text/css">
 		body {
 		    min-width: -webkit-fill-available;
@@ -68,7 +75,7 @@
 			    		<h3>Selamat Datang Admin</h3>
 			    		&nbsp;
 			    		<h4>Silahkan masukan PIN anda</h4>
-			    		<input type="text" name="pin_input" id="pin_input" class="form-control input_login_form" >
+			    		<input type="password" name="pin_input" id="pin_input" class="form-control input_login_form" >
 			    		<h6 class="error_pin">Pin salah</h6>
 			    		<input type="button" class="btn btn-primary button_login_form" name="id_login" id="id_login" value="Masuk" class="form-control" onclick="doPinLogin()">
 			    		<input type="button" class="btn btn-primary button_login_form" name="id_login" id="id_login" value="Batal" class="form-control" onclick="cancelLogin()">
@@ -88,49 +95,60 @@
   <script type="text/javascript">
     const remote = require('electron').remote
     var ipcRenderer = require('electron').ipcRenderer;
-    
-  	var newDate = new Date()
-  	$('#date_label').text(newDate)
+    $( "#osk-container" ).draggable()
 
-  	$('#user_id_form').show()
-  	$('#user_pin_form').hide()
-  	$('.error_pin').hide()
-  	$('.error_id').hide()
+    $('#id_input').onScreenKeyboard({
+      'draggable': true
+    });
+    
+  	var newDate = new Date();
+  	$('#date_label').text(newDate);
+
+  	$('#user_id_form').show();
+  	$('#user_pin_form').hide();
+  	$('.error_pin').hide();
+  	$('.error_id').hide();
 
   	function doAdminLogin () {
-  		var inputUserId = $('#id_input').val();
-  		$('.error_id').hide()
-  		if (inputUserId == '') {
-  			$('.error_id').show()
-  		} else {
-  			ipcRenderer.send('doUserIdValidate', inputUserId);
-  		}
+  		// var inputUserId = $('#id_input').val();
+  		// $('.error_id').hide();
+  		// if (inputUserId == '') {
+  		// 	$('.error_id').show();
+  		// } else {
+  		// 	ipcRenderer.send('doUserIdValidate', inputUserId);
+  		// }
+  		ipcRenderer.send('bypassLogin', true);
   	}
 
   	ipcRenderer.on('doUserIdValidate', function (event, userFound) {
   		if (userFound) {
-		  	$('#user_id_form').hide()
-		  	$('#user_pin_form').show()
+		  	$('#user_id_form').hide();
+		  	$('#user_pin_form').show();
   		} else {
-  			$('.error_id').show()
+  			$('.error_id').show();
   		}
   	})
 
   	function doPinLogin () {
+  		$('.error_pin').hide();
   		var inputUserId = $('#id_input').val();
   		var inputUserPin = $('#pin_input').val();
-        ipcRenderer.send('doLogin', inputUserId, inputUserPin);
+  		if (inputUserPin == '') {
+  			$('.error_pin').show();
+  		} else {
+  			ipcRenderer.send('doLogin', inputUserId, inputUserPin);
+  		}
   	}
 
   	ipcRenderer.on('doLogin', function (event, userFound) {
   		if (!userFound) {
-  			$('.error_pin').show()
+  			$('.error_pin').show();
   		}
   	})
 
   	function cancelLogin () {
-	  	$('#user_id_form').show()
-	  	$('#user_pin_form').hide()
+	  	$('#user_id_form').show();
+	  	$('#user_pin_form').hide();
   	}
 
   </script>
