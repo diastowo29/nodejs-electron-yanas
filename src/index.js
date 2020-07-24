@@ -112,15 +112,36 @@ ipcMain.on('saveOpeningSaldo', function (event, userId, openingSaldo) {
   })
 })
 
-ipcMain.on('savePin', function (event, userId, newPin) {
-  user_table.update({
-    pin_kartu: newPin
-  }, {
+ipcMain.on('savePin', function (event, userId, newPin, oldPin) {
+  user_table.findAll({
     where: {
-      id: userId
+      [Op.and]: [
+        {
+          idlogin_kartu: {
+            [Op.eq]: userId
+          }
+        },
+        {
+          pin_kartu: {
+            [Op.eq]: oldPin
+          }
+        }
+      ]
     }
-  }).then(user_table_update => {
-    mainWindow.webContents.send('savePin', true);
+  }).then(user_table_find => {
+    if (user_table_find.length > 0) {
+      user_table.update({
+        pin_kartu: newPin
+      }, {
+        where: {
+          idlogin_kartu: userId
+        }
+      }).then(user_table_update => {
+        mainWindow.webContents.send('savePin', true);
+      })
+    } else {
+      mainWindow.webContents.send('savePin', false);
+    }
   })
 })
 

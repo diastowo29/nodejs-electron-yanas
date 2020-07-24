@@ -50,6 +50,10 @@
             margin-top: 10px;
         }
 
+        .error_pin {
+            color: red;
+        }
+
 	</style>
   </head>
   <body>
@@ -272,6 +276,9 @@
                     <div class="col-md-12">
                         <label for="retype_pin" class="">Re-type Pin</label>
                         <input name="retype_pin" id="retype_pin" type="password" class="form-control">
+                    </div>
+                    <div class="col-md-12">
+                        <h6 id="error_pin" class="error_pin">Pin salah</h6>
                     </div>
                     <div class="col-md-3">
                         <input name="save_user" id="save_user" type="button" class="btn btn-primary last_btn" value="Save" onclick="doSavePin()">

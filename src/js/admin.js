@@ -20,7 +20,7 @@ ipcRenderer.on('getUserList', function (event, userList) {
 
         var pinOption = document.createElement('option');
         pinOption.innerHTML = userList[i].dataValues.idlogin_kartu;
-        pinOption.setAttribute('value', userList[i].dataValues.id);
+        pinOption.setAttribute('value', userList[i].dataValues.idlogin_kartu);
 
         var historyOption = document.createElement('option');
         historyOption.innerHTML = userList[i].dataValues.idlogin_kartu;
@@ -53,6 +53,7 @@ function openingSaldoClick () {
 
 function changePinClick () {
     $('#pinModal').modal('show');
+    $('#error_pin').hide();
 }
 
 function historyClick () {
@@ -311,14 +312,18 @@ ipcRenderer.on('saveOpeningSaldo', function (event, done) {
 
 function doSavePin () {
     var userRowId = $('#user_list_pin_select').val();
+    var oldPin = $('#old_pin').val();
     var newPin = $('#new_pin').val();
 
-    ipcRenderer.send('savePin', userRowId, newPin)
+    ipcRenderer.send('savePin', userRowId, newPin, oldPin)
 }
 
 ipcRenderer.on('savePin', function (event, done) {
     if (done) {
+        $('#error_pin').hide();
         $('#pinModal').modal('hide');
+    } else {
+        $('#error_pin').show();
     }
 })
 
