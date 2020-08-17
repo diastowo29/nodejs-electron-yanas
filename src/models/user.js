@@ -11,6 +11,9 @@ module.exports = (sequelize, type) => {
         pin_kartu: type.STRING(100),
         role_kartu: type.STRING(100),
         max_beras: type.INTEGER,
-        daily_counter: type.INTEGER
+        daily_counter: type.INTEGER,
+        max_beras_hari: type.INTEGER,
+        max_beras_periode_l: type.INTEGER,
+        max_beras_periode_x: type.INTEGER,
     });
 }

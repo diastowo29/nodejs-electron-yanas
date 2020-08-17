@@ -1,0 +1,228 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8">
+    <title>Hello World!</title>
+    <link rel="stylesheet" href="index.css">
+	<link rel="stylesheet" href="js/Keyboard-master/css/keyboard.css">
+	<link rel="stylesheet" href="js/Keyboard-master/css/keyboard-basic.css">
+	<link rel="stylesheet" href="styles/bootstrap.min.css">
+	<script src="js/jquery-3.5.1.js"></script>
+	<script src="js/jquery-3.5.1.min.js"></script>
+	<script src="js/bootstrap.min.js"></script>
+	<style type="text/css">
+		body {
+		    min-width: -webkit-fill-available;
+		}
+
+		.main_menu {
+			width: 40%; 
+			margin-top: 20px;
+		}
+
+        .ctn {
+            position: fixed;
+            min-width: -webkit-fill-available;
+            margin-left: auto;
+            margin-right: auto;
+            text-align: center;
+            display: table-cell;
+            vertical-align: middle 
+        }
+
+        .float_left {
+            float: left;
+        }
+
+        .float_right {
+            float: right;
+        }
+
+        .hidethis {
+            visibility: hidden;
+        }
+
+        .table_user {
+            margin: 10px 10px;
+        }
+
+        .last_btn {
+            margin-top: 10px;
+        }
+
+        .error_pin {
+            color: red;
+        }
+
+	</style>
+  </head>
+  <body>
+      <label style="display: none;" id="user_logged_id"></label>
+    <div id="user_main_menu" class="row" style="margin-top: 100px;">
+        <div class="ctn">
+    		<img src="images/yanas.png" alt="Yanas">
+        </div>
+        <div class="col-md-6">
+            <input type="button" class="btn btn-primary main_menu float_left" name="ambil_beras" id="ambil_beras" value="Ambil Beras" class="form-control" onclick="ambilBeras()">
+        </div>
+        <div class="col-md-6">
+            <input type="button" class="btn btn-primary main_menu float_right" name="cek_saldo" id="cek_saldo" value="Cek Saldo" class="form-control" onclick="cekSaldo()">
+        </div>
+        <div class="col-md-6">
+            <input type="button" class="btn btn-primary main_menu float_left" name="ubah_pin" id="ubah_pin" value="Ubah Pin" class="form-control" onclick="ubahPin()">
+        </div>
+        <div class="col-md-6">
+            <input type="button" class="btn btn-primary main_menu float_right" name="selesai" id="selesai" value="Selesai" class="form-control" onclick="userSelesai()">
+        </div>
+	</div>
+
+    <div id="user_beras_menu" class="row" style="margin-top: 100px;">
+        <div class="ctn">
+            <img src="images/yanas.png" alt="Yanas">
+        </div>
+        <div class="col-md-6">
+            <input type="button" class="btn btn-primary main_menu float_left" value="1 Liter" class="form-control">
+        </div>
+        <div class="col-md-6">
+            <input type="button" class="btn btn-primary main_menu float_right" value="6 Liter" class="form-control">
+        </div>
+        <div class="col-md-6">
+            <input type="button" class="btn btn-primary main_menu float_left" value="2 Liter" class="form-control">
+        </div>
+        <div class="col-md-6">
+            <input type="button" class="btn btn-primary main_menu float_right" value="7 Liter" class="form-control">
+        </div>
+        <div class="col-md-6">
+            <input type="button" class="btn btn-primary main_menu float_left" value="3 Liter" class="form-control">
+        </div>
+        <div class="col-md-6">
+            <input type="button" class="btn btn-primary main_menu float_right" value="8 Liter" class="form-control">
+        </div>
+        <div class="col-md-6">
+            <input type="button" class="btn btn-primary main_menu float_left" value="4 Liter" class="form-control">
+        </div>
+        <div class="col-md-6">
+            <input type="button" class="btn btn-primary main_menu float_right" value="9 Liter" class="form-control">
+        </div>
+        <div class="col-md-6">
+            <input type="button" class="btn btn-primary main_menu float_left" value="5 Liter" class="form-control">
+        </div>
+        <div class="col-md-6">
+            <input type="button" class="btn btn-primary main_menu float_right" value="Selesai" class="form-control" onclick="berasSelesai()">
+        </div>
+    </div>
+
+    <!-- Modal User -->
+    <div class="modal fade" id="userListModal" role="dialog">
+        <div class="modal-dialog modal-lg">
+            <!-- Modal content-->
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 class="modal-title">User List</h4>
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                </div>
+                <div class="modal-body row">
+                    <div class="col-md-2">
+                        <input type="button" class="btn btn-info" name="new" value="New" style="width: 100%;" onclick="doNewUser()">
+                    </div>
+                    <div class="col-md-8">
+                        <input type="text" class="form-control" id="find_input" name="find_input" placeholder="User ID or Name">
+                    </div>
+                    <div class="col-md-2">
+                        <input type="button" class="btn btn-info" name="find" value="Find" style="width: 100%;" onclick="doFindUser()">
+                    </div>
+                    <table class="table table-striped table_user">
+                        <thead>
+                            <tr>
+                                <th>ID</th>
+                                <th>Name</th>
+                                <th>Pin</th>
+                                <th>Role</th>
+                                <th>Edit</th>
+                                <th>Delete</th>
+                            </tr>
+                        </thead>
+                        <tbody id="user_list_table">
+                            <tr>
+                                <td>-</td>
+                                <td>-</td>
+                                <td>-</td>
+                                <td>-</td>
+                                <td>-</td>
+                                <td>-</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal Change PIN -->
+    <div class="modal fade" id="ubahPinModal" role="dialog">
+        <div class="modal-dialog modal-lg">
+            <!-- Modal content-->
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 class="modal-title">Ubah PIN</h4>
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                </div>
+                <div class="modal-body">
+                    <div class="col-md-12">
+                        <label for="pin_user_id" class="">User ID</label>
+                        <input name="id_pin" id="id_pin" type="text" class="form-control" value="daffa02" disabled="true">
+                    </div>
+                    <div class="col-md-12">
+                        <label for="old_pin" class="">Old Pin</label>
+                        <input name="old_pin" id="old_pin" type="password" class="form-control">
+                    </div>
+                    <div class="col-md-12">
+                        <label for="new_pin" class="">New Pin</label>
+                        <input name="new_pin" id="new_pin" type="password" class="form-control">
+                    </div>
+                    <div class="col-md-12">
+                        <label for="retype_pin" class="">Re-type Pin</label>
+                        <input name="retype_pin" id="retype_pin" type="password" class="form-control">
+                    </div>
+                    <div class="col-md-12">
+                        <h6 id="error_pin" class="error_pin">Pin salah</h6>
+                    </div>
+                    <div class="col-md-3">
+                        <input name="save_user" id="save_user" type="button" class="btn btn-primary last_btn" value="Save" onclick="doSavePin()">
+                    </div>
+                    <div class="col-md-12"></div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal Cek Saldo -->
+    <div class="modal fade" id="cekSaldoModal" role="dialog">
+        <div class="modal-dialog modal-lg">
+            <!-- Modal content-->
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 class="modal-title">Cek Saldo</h4>
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                </div>
+                <div class="modal-body">
+                    <div class="col-md-12">
+                        <label for="pin_user_id" class="">Saldo anda: 18 Liter</label>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+  </body>
+  <script src="js/user.js"></script>
+</html>

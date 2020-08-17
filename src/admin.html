@@ -187,6 +187,10 @@
                 </div>
                 <div class="modal-body">
                     <div class="col-md-12">
+                        <label for="kartu_id" class="">ID Kartu (Tempel KTP / Masukan Nomor KTP)</label>
+                        <input name="kartu_id" id="kartu_id" placeholder="3201231232334343" type="text" class="form-control">
+                    </div>
+                    <div class="col-md-12">
                         <label for="user_id" class="">User ID</label>
                         <input name="user_id" id="user_id" placeholder="daffa02" type="text" class="form-control">
                     </div>
@@ -201,6 +205,14 @@
                     <div class="col-md-12">
                         <label for="user_repin" class="">Retype Pin</label>
                         <input name="user_repin" id="user_repin" placeholder="6 Digit Pin" type="password" class="form-control">
+                    </div>
+                    <div class="col-md-12">
+                        <label for="user_max_beras_h" class="">Max Beras / Hari</label>
+                        <input name="user_max_beras_h" id="user_max_beras_h" placeholder="Max Beras" type="number" class="form-control">
+                    </div>
+                    <div class="col-md-12">
+                        <label for="user_max_beras_periode" class="">Max Beras / Periode</label>
+                        <input name="user_max_beras_periode" id="user_max_beras_periode" placeholder="Max Beras" type="number" class="form-control">
                     </div>
                     <div class="col-md-12">
                         <label for="user_type" class="">Type</label>
@@ -263,7 +275,7 @@
                 <div class="modal-body">
                     <div class="col-md-12">
                         <label for="pin_user_id" class="">User ID</label>
-                        <select class="form-control" id="user_list_pin_select"></select>
+                        <select class="form-control" id="user_list_pin_select" disabled></select>
                     </div>
                     <div class="col-md-12">
                         <label for="old_pin" class="">Old Pin</label>
@@ -307,24 +319,8 @@
                         <input name="ip_atm" id="ip_atm" placeholder="12" type="text" class="form-control">
                     </div>
                     <div class="col-md-12">
-                        <label for="card_digit" class="">Jumlah Digit Kartu</label>
-                        <input name="card_digit" id="card_digit" type="number" class="form-control">
-                    </div>
-                    <div class="col-md-12">
-                        <label for="max_beras_hari" class="">Max ambil beras / hari (L)</label>
-                        <input name="max_beras_hari" id="max_beras_hari" type="number" class="form-control">
-                    </div>
-                    <div class="col-md-12">
                         <label for="periode_beras" class="">Periode pengambilan beras (H)</label>
                         <input name="periode_beras" id="periode_beras" type="number" class="form-control">
-                    </div>
-                    <div class="col-md-12">
-                        <label for="max_beras_periode_l" class="">Max ambil beras / periode (L)</label>
-                        <input name="max_beras_periode_l" id="max_beras_periode_l" type="number" class="form-control">
-                    </div>
-                    <div class="col-md-12">
-                        <label for="max_beras_periode_x" class="">Max ambil beras / periode (X)</label>
-                        <input name="max_beras_periode_x" id="max_beras_periode_x" type="number" class="form-control">
                     </div>
                     <div class="col-md-12">
                         <label class="checkbox-inline">

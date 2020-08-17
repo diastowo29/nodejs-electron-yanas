@@ -3,7 +3,9 @@ const path = require('path');
 const ipcMain = require('electron').ipcMain;
 const Sequelize = require('sequelize');
 const { Op } = require("sequelize");
-const { user_table, trx_table, parameter_table } = require('./sequelize');
+const { user_table, trx_table, parameter_table, session_table } = require('./sequelize');
+
+var logged_in_user = '';
 
 // Handle creating/removing shortcuts on Windows when installing/uninstalling.
 if (require('electron-squirrel-startup')) { // eslint-disable-line global-require
@@ -14,8 +16,8 @@ var mainWindow;
 const createWindow = () => {
   // Create the browser window.
   mainWindow = new BrowserWindow({
-    width: 800,
-    height: 600,
+    width: 1200,
+    height: 1000,
     webPreferences: {
       nodeIntegration: true
     },
@@ -52,7 +54,7 @@ app.on('activate', () => {
 
 
 ipcMain.on('doLogin', function (event, userId, userPin) {
-  user_table.findAll({
+  user_table.findOne({
     where: {
       [Op.and]: [
         {
@@ -68,10 +70,18 @@ ipcMain.on('doLogin', function (event, userId, userPin) {
       ]
     }
   }).then(user_table_find => {
-    if (user_table_find.length > 0) {
-      mainWindow.loadFile(path.join(__dirname, 'admin.html'))
-    } else {
+    if (user_table_find === null) {
       mainWindow.webContents.send('doLogin', false);
+    } else {
+      logged_in_user = user_table_find.dataValues.idlogin_kartu;
+      session_table.create({
+        user_id: user_table_find.dataValues.id
+      })
+      if (user_table_find.dataValues.role_kartu == 'Admin') {
+        mainWindow.loadFile(path.join(__dirname, 'admin.html'))
+      } else {
+        mainWindow.loadFile(path.join(__dirname, 'user.html'))
+      }
     }
   })
 });
@@ -90,8 +100,20 @@ ipcMain.on('doUserIdValidate', function (event, userId) {
   })
 })
 
+ipcMain.on('ambilBeras', function(event, data) {
+  // console.log(logged_in_user)
+  user_table.findOne({
+    where: {
+      idlogin_kartu: logged_in_user
+    }
+  }).then(user_table_find => {
+    mainWindow.webContents.send('ambilBeras', user_table_find);
+  })
+})
+
 ipcMain.on('bypassLogin', function (event, data) {
-  mainWindow.loadFile(path.join(__dirname, 'admin.html'))
+  mainWindow.loadFile(path.join(__dirname, 'user.html'));
+  // mainWindow.loadFile(path.join(__dirname, 'admin.html'));
 })
 
 ipcMain.on('getUserList', function (event, data) {
@@ -146,7 +168,11 @@ ipcMain.on('savePin', function (event, userId, newPin, oldPin) {
 })
 
 ipcMain.on('adminDone', function (event, data) {
-  mainWindow.loadFile(path.join(__dirname, 'index.html'))
+  session_table.destroy({
+    truncate: true
+  }).then(session_deleted => {
+    mainWindow.loadFile(path.join(__dirname, 'index.html'))
+  })
 });
 
 

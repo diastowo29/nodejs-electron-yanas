@@ -195,6 +195,9 @@ ipcRenderer.on('editUser', function (event, userList) {
     $('#user_pin').val(userList[0].dataValues.pin_kartu);
     $('#user_repin').val(userList[0].dataValues.pin_kartu);
     $('#user_type').val(userList[0].dataValues.role_kartu);
+    $('#kartu_id').val(userList[0].dataValues.id_kartu);
+    $('#user_max_beras_h').val(userList[0].dataValues.max_beras_hari);
+    $('#user_max_beras_periode').val(userList[0].dataValues.max_beras_periode_l);
     $('#userModal').modal('show');
 })
 

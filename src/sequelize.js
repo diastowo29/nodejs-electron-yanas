@@ -2,6 +2,7 @@ const Sequelize = require('sequelize')
 const userModel = require('./models/user')
 const trxModel = require('./models/trx')
 const parameterModel = require('./models/parameter')
+const sessionModel = require('./models/sessions')
 
 var sequelize_db;
 
@@ -27,6 +28,7 @@ if (process.env.DATABASE_URL === undefined) {
 const user_table = userModel(sequelize_db, Sequelize)
 const trx_table = trxModel(sequelize_db, Sequelize)
 const parameter_table = parameterModel(sequelize_db, Sequelize)
+const session_table = sessionModel(sequelize_db, Sequelize)
 
 sequelize_db.sync({ force: true })
   .then(() => {
@@ -42,6 +44,9 @@ function seedingTable () {
         pin_kartu: '123456',
         role_kartu: 'Admin',
         max_beras: 100,
+        max_beras_hari: 3,
+        max_beras_periode_l: 100,
+        max_beras_periode_x: 100,
         daily_counter: 0
     }).then(user_table_create => {
     	console.log('USER CREATED')
@@ -54,6 +59,9 @@ function seedingTable () {
         pin_kartu: '292929',
         role_kartu: 'User',
         max_beras: 100,
+        max_beras_hari: 3,
+        max_beras_periode_l: 100,
+        max_beras_periode_x: 100,
         daily_counter: 0
     }).then(user_table_create => {
     	console.log('USER CREATED')
@@ -61,10 +69,7 @@ function seedingTable () {
 
     parameter_table.create({
         card_digit: 5,
-        max_beras_hari: 3,
         periode_beras: 7,
-        max_beras_periode_l: 100,
-        max_beras_periode_x: 100,
         auto_reload: true,
         auto_reload_day: 5,
         auto_reload_volume: 8
@@ -76,5 +81,6 @@ function seedingTable () {
 module.exports = {
     user_table,
     trx_table,
-    parameter_table
+    parameter_table,
+    session_table
 }

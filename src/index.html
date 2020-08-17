@@ -18,6 +18,7 @@
   <link rel="stylesheet" href="styles/onScreenKeyboard.css">
   <script src="js/jquery.onScreenKeyboard.js"></script>
 	<style type="text/css">
+    
 		body {
 		    min-width: -webkit-fill-available;
 		    background-color: darkgrey;
@@ -98,7 +99,9 @@
     $( "#osk-container" ).draggable()
 
     $('#id_input').onScreenKeyboard({
-      'draggable': true
+	  'draggable': true,
+	  'leftPosition': '10%',
+	  'topPosition': '40%'
     });
     
   	var newDate = new Date();
@@ -110,14 +113,14 @@
   	$('.error_id').hide();
 
   	function doAdminLogin () {
-  		// var inputUserId = $('#id_input').val();
-  		// $('.error_id').hide();
-  		// if (inputUserId == '') {
-  		// 	$('.error_id').show();
-  		// } else {
-  		// 	ipcRenderer.send('doUserIdValidate', inputUserId);
-  		// }
-  		ipcRenderer.send('bypassLogin', true);
+  		var inputUserId = $('#id_input').val();
+  		$('.error_id').hide();
+  		if (inputUserId == '') {
+  			$('.error_id').show();
+  		} else {
+  			ipcRenderer.send('doUserIdValidate', inputUserId);
+  		}
+  		// ipcRenderer.send('bypassLogin', true);
   	}
 
   	ipcRenderer.on('doUserIdValidate', function (event, userFound) {
