@@ -3,7 +3,7 @@ const path = require('path');
 const ipcMain = require('electron').ipcMain;
 const Sequelize = require('sequelize');
 const { Op } = require("sequelize");
-const { user_table, trx_table, parameter_table, session_table } = require('./sequelize');
+const { user_table, trx_table, parameter_table, session_table, log_table } = require('./sequelize');
 
 var logged_in_user = '';
 
@@ -16,8 +16,8 @@ var mainWindow;
 const createWindow = () => {
   // Create the browser window.
   mainWindow = new BrowserWindow({
-    width: 1200,
-    height: 1000,
+    width: 1000,
+    height: 800,
     webPreferences: {
       nodeIntegration: true
     },
@@ -111,6 +111,11 @@ ipcMain.on('ambilBeras', function(event, data) {
   })
 })
 
+ipcMain.on('tarikBeras', function (event, qty) {
+
+  createLog(logged_in_user, 'AMBIL BERAS ' + qty);
+})
+
 ipcMain.on('bypassLogin', function (event, data) {
   mainWindow.loadFile(path.join(__dirname, 'user.html'));
   // mainWindow.loadFile(path.join(__dirname, 'admin.html'));
@@ -123,6 +128,9 @@ ipcMain.on('getUserList', function (event, data) {
 });
 
 ipcMain.on('saveOpeningSaldo', function (event, userId, openingSaldo) {
+
+  createLog(logged_in_user, 'OPENING SALDO USER: ' + userId)
+
   user_table.update({
     max_beras: openingSaldo
   }, {
@@ -135,6 +143,8 @@ ipcMain.on('saveOpeningSaldo', function (event, userId, openingSaldo) {
 })
 
 ipcMain.on('savePin', function (event, userId, newPin, oldPin) {
+  createLog(logged_in_user, 'UBAH PIN')
+
   user_table.findAll({
     where: {
       [Op.and]: [
@@ -175,6 +185,31 @@ ipcMain.on('adminDone', function (event, data) {
   })
 });
 
+ipcMain.on('userChangePin', function (event, data) {
+  session_table.findAll().then(session_found => {
+    user_table.findOne({
+      where: {
+        id: session_found[0].dataValues.user_id
+      }
+    }).then(user_found => {
+      mainWindow.webContents.send('userChangePin', user_found);
+    })
+  })
+})
+
+ipcMain.on('userCekSaldo', function (event, data) {
+  createLog(logged_in_user, 'CEK SALDO');
+
+  session_table.findAll().then(session_found => {
+    user_table.findOne({
+      where: {
+        id: session_found[0].dataValues.user_id
+      }
+    }).then(user_found => {
+      mainWindow.webContents.send('userCekSaldo', user_found);
+    })
+  })
+})
 
 ipcMain.on('showParameter', function (event, data) {
   parameter_table.findAll().then(parameter_table_all => {
@@ -183,6 +218,9 @@ ipcMain.on('showParameter', function (event, data) {
 })
 
 ipcMain.on('saveParameter', function (event, parameter) {
+  
+  createLog(logged_in_user, 'UBAH PARAMETER');
+
   parameter_table.findAll().then(parameter_table_all => {
     if (parameter_table_all.length > 0) {
       let parameterId = parameter_table_all[0].dataValues.id;
@@ -288,6 +326,7 @@ ipcMain.on('findTrx', function (event, parameter) {
 })
 
 ipcMain.on('findUser', function (event, parameter) {
+  createLog(logged_in_user, 'CARI USER: ' + parameter);
   user_table.findAll({
     where: {
       [Op.or]: [
@@ -309,6 +348,7 @@ ipcMain.on('findUser', function (event, parameter) {
 })
 
 ipcMain.on('deleteUser', function (event, id) {
+  createLog(logged_in_user, 'DELETE USER');
   user_table.destroy({
     where: {
       id: id
@@ -317,6 +357,36 @@ ipcMain.on('deleteUser', function (event, id) {
     mainWindow.webContents.send('deleteUser', true);
   })
 })
+
+ipcMain.on('showHistory', function (event, userId, hFrom, hTo) {
+  // console.log(userId + hFrom + hTo);
+  log_table.findAll({
+    where: {
+      [Op.and]: [
+        {
+          user_id: {
+            [Op.eq]: userId
+          }
+        },
+        {
+          createdAt: {
+            [Op.gt]: hFrom,
+            [Op.lt]: hTo
+          }
+        }
+      ]
+    }
+  }).then(log_found => {
+    mainWindow.webContents.send('showHistory', log_found)
+  })
+})
+
+function createLog (user_id, activity) {
+  log_table.create({
+    user_id: user_id,
+    activity: activity
+  });
+}
 
 // In this file you can include the rest of your app's specific main process
 // code. You can also put them in separate files and import them here.

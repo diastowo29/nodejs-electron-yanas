@@ -11,7 +11,6 @@ function getUserList () {
 
 ipcRenderer.on('getUserList', function (event, userList) {
     var userListSelect = document.getElementById('user_list_select');
-    var userListPinSelect = document.getElementById('user_list_pin_select');
     var userListHistorySelect = document.getElementById('user_list_history_select');
     for (var i=0; i<userList.length; i++) {
         var option = document.createElement('option');
@@ -24,9 +23,8 @@ ipcRenderer.on('getUserList', function (event, userList) {
 
         var historyOption = document.createElement('option');
         historyOption.innerHTML = userList[i].dataValues.idlogin_kartu;
-        historyOption.setAttribute('value', userList[i].dataValues.id);
+        historyOption.setAttribute('value', userList[i].dataValues.idlogin_kartu);
 
-        userListPinSelect.appendChild(pinOption);
         userListHistorySelect.appendChild(historyOption);
         userListSelect.appendChild(option);
     }
@@ -52,9 +50,22 @@ function openingSaldoClick () {
 }
 
 function changePinClick () {
+    ipcRenderer.send('userChangePin', false);
+}
+
+ipcRenderer.on('userChangePin', function (event, userSession) {
+    console.log(userSession)
+    var userListPinSelect = document.getElementById('user_list_pin_select');
+
+    var pinOption = document.createElement('option');
+    pinOption.innerHTML = userSession.dataValues.idlogin_kartu;
+    pinOption.setAttribute('value', userSession.dataValues.idlogin_kartu);
+    userListPinSelect.appendChild(pinOption);
+    
     $('#pinModal').modal('show');
     $('#error_pin').hide();
-}
+    $('#error_pin_match').hide();
+})
 
 function historyClick () {
     $('#historyModal').modal('show');
@@ -99,6 +110,38 @@ function doSaveParameter () {
     ipcRenderer.send('saveParameter', parameter);
 }
 
+function showHistory () {
+    var userId = $('#user_list_history_select').val();
+    var hFrom = $('#history_from').val();
+    var hTo = $('#history_to').val();
+    ipcRenderer.send('showHistory', userId, hFrom, hTo);
+}
+
+ipcRenderer.on('showHistory', function (event, logsFound) {
+    if (logsFound.length > 0) {
+        var historyTbody = document.getElementById('history_list_tbody');
+        $("#history_list_tbody > tr").remove();
+        logsFound.forEach(logz => {
+            var row = document.createElement('tr');
+            var cellId = document.createElement('td');
+            var cellDate = document.createElement('td');
+            var cellAct = document.createElement('td');
+
+            cellId.innerHTML = logz.dataValues.user_id;
+            cellDate.innerHTML = logz.dataValues.createdAt;
+            cellAct.innerHTML = logz.dataValues.activity;
+
+            row.appendChild(cellId)
+            row.appendChild(cellDate)
+            row.appendChild(cellAct)
+
+            historyTbody.appendChild(row);
+        });
+    } else {
+        /* LOGS NOT FOUND */
+    }
+})
+
 function doNewTrx () {
     $('#trxModal').modal('show');
 }
@@ -141,11 +184,17 @@ ipcRenderer.on('showTrx', function (event, trxList) {
     populateTrxList(trxList);
 });
 
-
-
-
-
 function doNewUser () {
+    $('#user_pin').prop("disabled", false);
+    $('#user_repin').prop("disabled", false);
+    $('#user_id').val('');
+    $('#nama').val('');
+    $('#user_pin').val('');
+    $('#user_repin').val('');
+    $('#user_type').val('');
+    $('#kartu_id').val('');
+    $('#user_max_beras_h').val('');
+    $('#user_max_beras_periode').val('');
     $('#userModal').modal('show');
 }
 
@@ -194,6 +243,10 @@ ipcRenderer.on('editUser', function (event, userList) {
     $('#nama').val(userList[0].dataValues.nama_kartu);
     $('#user_pin').val(userList[0].dataValues.pin_kartu);
     $('#user_repin').val(userList[0].dataValues.pin_kartu);
+
+    $('#user_pin').prop("disabled", true);
+    $('#user_repin').prop("disabled", true);
+
     $('#user_type').val(userList[0].dataValues.role_kartu);
     $('#kartu_id').val(userList[0].dataValues.id_kartu);
     $('#user_max_beras_h').val(userList[0].dataValues.max_beras_hari);
@@ -317,8 +370,13 @@ function doSavePin () {
     var userRowId = $('#user_list_pin_select').val();
     var oldPin = $('#old_pin').val();
     var newPin = $('#new_pin').val();
+    var retypeNewPin = $('#retype_pin').val();
 
-    ipcRenderer.send('savePin', userRowId, newPin, oldPin)
+    if (newPin != retypeNewPin) {
+        $('#error_pin_match').show();
+    } else {
+        ipcRenderer.send('savePin', userRowId, newPin, oldPin)
+    }
 }
 
 ipcRenderer.on('savePin', function (event, done) {

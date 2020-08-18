@@ -11,9 +11,10 @@
 	<script src="js/jquery-3.5.1.min.js"></script>
 	<script src="js/bootstrap.min.js"></script>
 	<style type="text/css">
-		body {
+        body {
 		    min-width: -webkit-fill-available;
-		}
+		    background-image: url('images/batik3.jpg');
+        }
 
 		.main_menu {
 			width: 40%; 
@@ -51,6 +52,10 @@
         }
 
         .error_pin {
+            color: red;
+        }
+
+        .error_pin_match {
             color: red;
         }
 
@@ -292,8 +297,12 @@
                     <div class="col-md-12">
                         <h6 id="error_pin" class="error_pin">Pin salah</h6>
                     </div>
+                    <div class="col-md-12">
+                        <h6 id="error_pin_match" class="error_pin_match">Pin tidak sama</h6>
+                    </div>
                     <div class="col-md-3">
-                        <input name="save_user" id="save_user" type="button" class="btn btn-primary last_btn" value="Save" onclick="doSavePin()">
+                        <input name="save_user" id="save_user" type="button" 
+                        class="btn btn-primary last_btn" value="Save" onclick="doSavePin()">
                     </div>
                     <div class="col-md-12"></div>
                 </div>
@@ -402,7 +411,7 @@
                     </div>
                     <div class="col-md-2">
                         <label for="run" class="hidethis">run</label>
-                        <input class="btn btn-default" type="button" name="run" value="Lihat">
+                        <input class="btn btn-default" type="button" name="run" value="Lihat" onclick="showHistory()">
                     </div>
                     <div class="col-md-12">
                         <table class="table table-striped">
@@ -410,10 +419,10 @@
                                 <tr>
                                     <th>User ID</th>
                                     <th>Tanggal</th>
-                                    <th>Transaksi</th>
+                                    <th>Aktifitas</th>
                                 </tr>
                             </thead>
-                            <tbody>
+                            <tbody id="history_list_tbody">
                                 <tr>
                                     <td>-</td>
                                     <td>-</td>

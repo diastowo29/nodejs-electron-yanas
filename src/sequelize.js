@@ -3,6 +3,7 @@ const userModel = require('./models/user')
 const trxModel = require('./models/trx')
 const parameterModel = require('./models/parameter')
 const sessionModel = require('./models/sessions')
+const logModel = require('./models/logs')
 
 var sequelize_db;
 
@@ -29,11 +30,12 @@ const user_table = userModel(sequelize_db, Sequelize)
 const trx_table = trxModel(sequelize_db, Sequelize)
 const parameter_table = parameterModel(sequelize_db, Sequelize)
 const session_table = sessionModel(sequelize_db, Sequelize)
+const log_table = logModel(sequelize_db, Sequelize)
 
-sequelize_db.sync({ force: true })
+sequelize_db.sync(/* { force: true } */)
   .then(() => {
     console.log(`Database & tables created!`);
-    seedingTable();
+    // seedingTable();
 })
 
 function seedingTable () {
@@ -76,11 +78,16 @@ function seedingTable () {
     }).then(parameter_table_create => {
     	console.log('PARAMETER CREATED');
     })
+
+    session_table.destroy({
+      truncate: true
+    })
 }
 
 module.exports = {
     user_table,
     trx_table,
     parameter_table,
-    session_table
+    session_table,
+    log_table
 }

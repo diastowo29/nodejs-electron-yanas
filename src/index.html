@@ -12,16 +12,19 @@
 	<script src="js/bootstrap.min.js"></script>
 
 
-  <script src = "https://code.jquery.com/jquery-1.10.2.js"></script>
-  <script src = "https://code.jquery.com/ui/1.10.4/jquery-ui.js"></script>
+	<script src = "https://code.jquery.com/jquery-1.10.2.js"></script>
+	<script src = "https://code.jquery.com/ui/1.10.4/jquery-ui.js"></script>
 
-  <link rel="stylesheet" href="styles/onScreenKeyboard.css">
-  <script src="js/jquery.onScreenKeyboard.js"></script>
+	<link rel="stylesheet" href="styles/onScreenKeyboard.css">
+	<script src="js/jquery.onScreenKeyboard.js"></script>
+
+	<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/simple-keyboard@latest/build/css/index.css">
 	<style type="text/css">
     
 		body {
 		    min-width: -webkit-fill-available;
-		    background-color: darkgrey;
+		    /* background-color: darkgrey; */
+		    background-image: url('images/batik3.jpg');
 		}
 
 		.button_login_form {
@@ -84,7 +87,9 @@
 		    	</div>
 	    	</div>
     	</div>
-    </div>
+	</div>
+	<div class="simple-keyboard"></div>
+	<script src="https://cdn.jsdelivr.net/npm/simple-keyboard@latest/build/index.min.js"></script>
   </body>
   <!-- <script src="https://cdn.jsdelivr.net/npm/chart.js@2.8.0"></script> -->
   <!-- <script src="js/Keyboard-master/js/jquery.keyboard.extension-all.js"></script>
@@ -95,7 +100,41 @@
   <script src="js/Keyboard-master/js/jquery.keyboard.js"></script> -->
   <script type="text/javascript">
     const remote = require('electron').remote
-    var ipcRenderer = require('electron').ipcRenderer;
+	var ipcRenderer = require('electron').ipcRenderer;
+	
+	// let Keyboard = window.SimpleKeyboard.default;
+
+	// let myKeyboard = new Keyboard({
+	// 	onChange: input => onChange(input),
+	// 	onKeyPress: button => onKeyPress(button),
+	// 	layout: {
+	// 		'default': [
+	// 			'1 2 3',
+	// 			'4 5 6',
+	// 			'7 8 9'
+	// 		],
+	// 		'shift': [
+	// 			'~ ! @ # $ % ^ & * ( ) _ + {bksp}',
+	// 			'{tab} Q W E R T Y U I O P { } |',
+	// 			'{lock} A S D F G H J K L : " {enter}',
+	// 			'{shift} Z X C V B N M < > ? {shift}',
+	// 			'.com @ {space}'
+	// 		]
+	// 	}
+	// });
+
+
+	// function onChange(input) {
+	// 	document.querySelector("#id_input").value = input;
+	// 	console.log("Input changed", input);
+	// }
+
+
+	// function onKeyPress(button) {
+	// console.log("Button pressed", button);
+	// }
+
+
     $( "#osk-container" ).draggable()
 
     $('#id_input').onScreenKeyboard({
