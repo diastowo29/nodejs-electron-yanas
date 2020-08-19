@@ -4,13 +4,71 @@ const ipcMain = require('electron').ipcMain;
 const Sequelize = require('sequelize');
 const { Op } = require("sequelize");
 const { user_table, trx_table, parameter_table, session_table, log_table } = require('./sequelize');
+const parameter = require('./models/parameter');
+const { SSL_OP_SSLEAY_080_CLIENT_DH_BUG } = require('constants');
 
 var logged_in_user = '';
+
+var adding_new_user = false;
 
 // Handle creating/removing shortcuts on Windows when installing/uninstalling.
 if (require('electron-squirrel-startup')) { // eslint-disable-line global-require
   app.quit();
 }
+
+/* RASPBERRY AREA */
+
+/* var rfidInterval = setInterval(startRfid, 500);
+
+function restartRfid () {
+  clearInterval(rfidInterval);
+  rfidInterval = setInterval(startRfid, 500);
+}
+
+function startRfid () {
+  mfrc522.reset();
+
+  let response = mfrc522.findCard();
+  if (!response.status) {
+    console.log("No Card ");
+    return;
+  } else {
+    // CARD DETECTED - STOP SCANNING
+    clearInterval(rfidInterval);
+  }
+  console.log("Card detected, CardType: " + response.bitSize);
+
+  response = mfrc522.getUid();
+  if (!response.status) {
+    console.log("UID Scan Error");
+    return;
+  }
+  const uid = response.data;
+  let cardID = uid.toString();
+  console.log('===== Card ID: ' + cardID);
+
+  if (!adding_new_user) {
+    user_table.findOne({
+      where: {
+        id_kartu: cardID
+      }
+    }).then(user_found => {
+      if (user_found !== null) {
+        clearInterval(rfidInterval);
+        mainWindow.webContents.send('cardUserValidate', user_found.dataValues.idlogin_kartu);
+      }
+    });
+  } else {
+    clearInterval(rfidInterval);
+    mainWindow.webContents.send('newUserCard', cardID);
+    adding_new_user = false;
+  }
+
+  //# Stop
+  mfrc522.stopCrypto();
+} */
+
+/* RASPBERRY AREA */
 
 var mainWindow;
 const createWindow = () => {
@@ -80,11 +138,64 @@ ipcMain.on('doLogin', function (event, userId, userPin) {
       if (user_table_find.dataValues.role_kartu == 'Admin') {
         mainWindow.loadFile(path.join(__dirname, 'admin.html'))
       } else {
-        mainWindow.loadFile(path.join(__dirname, 'user.html'))
+        var todayTime = new Date();
+        parameter_table.findAll().then(yanas_parameter => {
+          var dayReload = parseInt(yanas_parameter[0].dataValues.auto_reload_day);
+          var literReload = parseInt(yanas_parameter[0].dataValues.auto_reload_volume);
+          var isAutoReload = yanas_parameter[0].dataValues.auto_reload;
+          var berasPeriod = parseInt(yanas_parameter[0].dataValues.periode_beras);
+
+          var userCreated = user_table_find.dataValues.createdAt;
+
+          var userDatePeriod = userCreated.getDate() + (berasPeriod);
+
+          if (userDatePeriod > 30) {
+            userDatePeriod = userDatePeriod - 30;
+          }
+
+          var newUserKuota = user_table_find.dataValues.max_beras;
+          var newDailyCounter = user_table_find.dataValues.daily_counter;
+          var newPeriodCounter = user_table_find.dataValues.period_counter;
+
+          if (todayTime.getDate() == dayReload) {
+            if (isAutoReload) {
+              newUserKuota = literReload;
+            }
+          }
+
+          if (todayTime.getDate() != user_table_find.dataValues.updatedAt.getDate()) {
+            newDailyCounter = 0;
+          }
+
+          if (user_table_find.dataValues.period_counter > 0) {
+            if (todayTime.getDate() > (user_table_find.dataValues.updatedAt.getDate() + berasPeriod)) {
+              /* RESET PERIOD COUNTER */
+              newPeriodCounter = 0;
+            }
+          }
+
+          user_table.update({
+            max_beras: newUserKuota,
+            daily_counter: newDailyCounter,
+            period_counter: newPeriodCounter
+          },{
+            where: {
+              id: user_table_find.dataValues.id
+            }
+          }).then(user_updated => {
+            mainWindow.loadFile(path.join(__dirname, 'user.html'))
+          })
+        })
       }
     }
   })
 });
+
+ipcMain.on('addingNewUser', function (event, newUser) {
+  if (newUser) {
+    adding_new_user = true;
+  }
+})
 
 ipcMain.on('doUserIdValidate', function (event, userId) {
   user_table.findAll({
@@ -112,8 +223,47 @@ ipcMain.on('ambilBeras', function(event, data) {
 })
 
 ipcMain.on('tarikBeras', function (event, qty) {
+  var qtyRequest = parseInt(qty);
+  user_table.findOne({
+    where: {
+      idlogin_kartu: logged_in_user
+    }
+  }).then(user_found => {
+    var userCanGetBeras = false;
+    if (user_found != null) {
+      var userQuota = parseInt(user_found.dataValues.max_beras);
+      var userDaily = parseInt(user_found.dataValues.daily_counter);
+      var userDailyMax = parseInt(user_found.dataValues.max_beras_hari);
+      var userWeekly = parseInt(user_found.dataValues.period_counter);
+      var userWeeklyMax = parseInt(user_found.dataValues.max_beras_periode_l);
 
-  createLog(logged_in_user, 'AMBIL BERAS ' + qty);
+      if (userQuota > qtyRequest) {
+        if (((userDaily + qtyRequest) <= userDailyMax) && (userWeekly + qtyRequest) <= userWeeklyMax) {
+          userDaily = userDaily + qtyRequest;
+          userWeeklyMax = userWeeklyMax + qtyRequest;
+
+          userQuota = userQuota - qtyRequest;
+
+          user_table.update({
+            max_beras: userQuota.toString(),
+            daily_counter: userDaily.toString(),
+            period_counter: userWeeklyMax.toString()
+          },{
+            where: {
+              id: user_found.dataValues.id
+            }
+          }).then(user_updated => {
+            mainWindow.webContents.send('tarikBerasDone', true);
+            createLog(logged_in_user, 'AMBIL BERAS ' + qty);
+          })
+        } else {
+          console.log('kuota mingguan/harian melampaui');
+        }
+      } else {
+        console.log('kuota tidak cukup');
+      }
+    }
+  })
 })
 
 ipcMain.on('bypassLogin', function (event, data) {

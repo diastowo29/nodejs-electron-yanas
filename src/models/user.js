@@ -10,10 +10,29 @@ module.exports = (sequelize, type) => {
         nama_kartu: type.STRING(100),
         pin_kartu: type.STRING(100),
         role_kartu: type.STRING(100),
-        max_beras: type.INTEGER,
-        daily_counter: type.INTEGER,
-        max_beras_hari: type.INTEGER,
-        max_beras_periode_l: type.INTEGER,
-        max_beras_periode_x: type.INTEGER,
+        max_beras: {
+          type: type.INTEGER,
+          defaultValue: 0
+        },
+        daily_counter: {
+          type: type.INTEGER,
+          defaultValue: 0
+        },
+        period_counter: {
+          type: type.INTEGER,
+          defaultValue: 0
+        },
+        max_beras_hari: {
+          type: type.INTEGER,
+          defaultValue: 0
+        },
+        max_beras_periode_l: {
+          type: type.INTEGER,
+          defaultValue: 0
+        },
+        max_beras_periode_x: {
+          type: type.INTEGER,
+          defaultValue: 0
+        },
     });
 }

@@ -32,10 +32,10 @@ const parameter_table = parameterModel(sequelize_db, Sequelize)
 const session_table = sessionModel(sequelize_db, Sequelize)
 const log_table = logModel(sequelize_db, Sequelize)
 
-sequelize_db.sync(/* { force: true } */)
+sequelize_db.sync({ force: true } /* { alter: true } */)
   .then(() => {
     console.log(`Database & tables created!`);
-    // seedingTable();
+    seedingTable();
 })
 
 function seedingTable () {

@@ -139,6 +139,22 @@ ipcRenderer.on('showHistory', function (event, logsFound) {
         });
     } else {
         /* LOGS NOT FOUND */
+        var historyTbody = document.getElementById('history_list_tbody');
+        $("#history_list_tbody > tr").remove();
+        var row = document.createElement('tr');
+        var cellId = document.createElement('td');
+        var cellDate = document.createElement('td');
+        var cellAct = document.createElement('td');
+
+        cellId.innerHTML = '-';
+        cellDate.innerHTML = '-';
+        cellAct.innerHTML = '-';
+
+        row.appendChild(cellId)
+        row.appendChild(cellDate)
+        row.appendChild(cellAct)
+
+        historyTbody.appendChild(row);
     }
 })
 
@@ -195,8 +211,13 @@ function doNewUser () {
     $('#kartu_id').val('');
     $('#user_max_beras_h').val('');
     $('#user_max_beras_periode').val('');
+    ipcRenderer.send('addingNewUser', true);
     $('#userModal').modal('show');
 }
+
+ipcRenderer.on('newUserCard', function(event, idKartu) {
+    $('#kartu_id').val(idKartu);
+})
 
 function doSaveUser () {
     let idlogin_kartu = $('#user_id').val();

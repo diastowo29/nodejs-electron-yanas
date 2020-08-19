@@ -159,8 +159,15 @@
   		} else {
   			ipcRenderer.send('doUserIdValidate', inputUserId);
   		}
-  		// ipcRenderer.send('bypassLogin', true);
-  	}
+		  // ipcRenderer.send('bypassLogin', true);
+	}
+
+	ipcRenderer.on('cardUserValidate', function (event, idlogin) {
+		$('#id_input').val(idlogin);
+		$('#user_id_form').hide();
+		$('#user_pin_form').show();
+	})
+	  
 
   	ipcRenderer.on('doUserIdValidate', function (event, userFound) {
   		if (userFound) {
@@ -189,6 +196,7 @@
   	})
 
   	function cancelLogin () {
+		$('#id_input').val('');
 	  	$('#user_id_form').show();
 	  	$('#user_pin_form').hide();
   	}

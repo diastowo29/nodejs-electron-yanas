@@ -16,6 +16,12 @@ function tarikBeras (qty) {
     ipcRenderer.send('tarikBeras', qty);
 }
 
+ipcRenderer.on('tarikBerasDone', function(event, berasDone) {
+    if (berasDone) {
+        berasSelesai();
+    }
+})
+
 function berasSelesai () {
 	$('#user_main_menu').show();
 	$('#user_beras_menu').hide();
