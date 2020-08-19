@@ -3,9 +3,15 @@ const path = require('path');
 const ipcMain = require('electron').ipcMain;
 const Sequelize = require('sequelize');
 const { Op } = require("sequelize");
-const { user_table, trx_table, parameter_table, session_table, log_table } = require('./sequelize');
-const parameter = require('./models/parameter');
-const { SSL_OP_SSLEAY_080_CLIENT_DH_BUG } = require('constants');
+const { user_table, 
+  trx_table, 
+  parameter_table, 
+  session_table, 
+  log_table } = require('./sequelize');
+
+const Mfrc522 = require("mfrc522-rpi");
+const SoftSPI = require("rpi-softspi");
+var Gpio = require('onoff').Gpio;
 
 var logged_in_user = '';
 
@@ -16,9 +22,9 @@ if (require('electron-squirrel-startup')) { // eslint-disable-line global-requir
   app.quit();
 }
 
-/* RASPBERRY AREA */
+/* ===== RFID AREA ===== */
 
-/* var rfidInterval = setInterval(startRfid, 500);
+var rfidInterval = setInterval(startRfid, 500);
 
 function restartRfid () {
   clearInterval(rfidInterval);
@@ -66,9 +72,56 @@ function startRfid () {
 
   //# Stop
   mfrc522.stopCrypto();
-} */
+}
 
-/* RASPBERRY AREA */
+/* ===== RFID AREA ===== */
+
+/*  ===== SONIC ===== */
+const piGpio = require('pigpio').Gpio;
+const MICROSECDONDS_PER_CM = 1e6/34321;
+
+const trigger = new piGpio(23, {mode: Gpio.OUTPUT});
+const echo = new piGpio(24, {mode: Gpio.INPUT, alert: true});
+
+console.log('watch')
+trigger.digitalWrite(0);
+
+let startTick;
+
+echo.on('alert', (level, tick) => {
+  if (level == 1) {
+    startTick = tick;
+  } else {
+    const endTick = tick;
+    const diff = (endTick >> 0) - (startTick >> 0); // Unsigned 32 bit arithmetic
+    console.log(diff / 2 / MICROSECDONDS_PER_CM);
+    distanceLeft = diff / 2 / MICROSECDONDS_PER_CM;
+  }
+});
+/*  ===== SONIC ===== */
+
+let waitTime = 3000;
+var pinEnable = new Gpio(13, 'out');
+var pinDir = new Gpio(19, 'out');
+var pinPulse = new Gpio(21, 'out');
+
+initiateProgram();
+const softSPI = new SoftSPI({
+  clock: 23, // 23 pin number of SCLK
+  mosi: 19, // 19 pin number of MOSI
+  miso: 21, // 21 pin number of MISO
+  client: 24 // 24 pin number of CS
+});
+const mfrc522 = new Mfrc522(softSPI).setResetPin(22);
+
+function initiateProgram () {
+  // console.log(ip.address())
+  pinEnable.writeSync(1);
+}
+
+
+
+
 
 var mainWindow;
 const createWindow = () => {
@@ -145,14 +198,6 @@ ipcMain.on('doLogin', function (event, userId, userPin) {
           var isAutoReload = yanas_parameter[0].dataValues.auto_reload;
           var berasPeriod = parseInt(yanas_parameter[0].dataValues.periode_beras);
 
-          var userCreated = user_table_find.dataValues.createdAt;
-
-          var userDatePeriod = userCreated.getDate() + (berasPeriod);
-
-          if (userDatePeriod > 30) {
-            userDatePeriod = userDatePeriod - 30;
-          }
-
           var newUserKuota = user_table_find.dataValues.max_beras;
           var newDailyCounter = user_table_find.dataValues.daily_counter;
           var newPeriodCounter = user_table_find.dataValues.period_counter;
@@ -169,7 +214,6 @@ ipcMain.on('doLogin', function (event, userId, userPin) {
 
           if (user_table_find.dataValues.period_counter > 0) {
             if (todayTime.getDate() > (user_table_find.dataValues.updatedAt.getDate() + berasPeriod)) {
-              /* RESET PERIOD COUNTER */
               newPeriodCounter = 0;
             }
           }
@@ -239,6 +283,11 @@ ipcMain.on('tarikBeras', function (event, qty) {
 
       if (userQuota > qtyRequest) {
         if (((userDaily + qtyRequest) <= userDailyMax) && (userWeekly + qtyRequest) <= userWeeklyMax) {
+
+          pinEnable.writeSync(0);
+          wait(925*12*qtyRequest);
+          pinEnable.writeSync(1);
+
           userDaily = userDaily + qtyRequest;
           userWeeklyMax = userWeeklyMax + qtyRequest;
 
@@ -328,6 +377,7 @@ ipcMain.on('savePin', function (event, userId, newPin, oldPin) {
 })
 
 ipcMain.on('adminDone', function (event, data) {
+  restartRfid();
   session_table.destroy({
     truncate: true
   }).then(session_deleted => {
