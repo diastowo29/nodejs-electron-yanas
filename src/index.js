@@ -22,6 +22,26 @@ if (require('electron-squirrel-startup')) { // eslint-disable-line global-requir
   app.quit();
 }
 
+let waitTime = 3000;
+var pinEnable = new Gpio(13, 'out');
+var pinDir = new Gpio(19, 'out');
+var pinPulse = new Gpio(21, 'out');
+
+initiateProgram();
+const softSPI = new SoftSPI({
+  clock: 23, // 23 pin number of SCLK
+  mosi: 19, // 19 pin number of MOSI
+  miso: 21, // 21 pin number of MISO
+  client: 24 // 24 pin number of CS
+});
+const mfrc522 = new Mfrc522(softSPI).setResetPin(22);
+
+function initiateProgram () {
+  // console.log(ip.address())
+  pinEnable.writeSync(1);
+}
+
+
 /* ===== RFID AREA ===== */
 
 var rfidInterval = setInterval(startRfid, 500);
@@ -99,26 +119,6 @@ echo.on('alert', (level, tick) => {
   }
 });
 /*  ===== SONIC ===== */
-
-let waitTime = 3000;
-var pinEnable = new Gpio(13, 'out');
-var pinDir = new Gpio(19, 'out');
-var pinPulse = new Gpio(21, 'out');
-
-initiateProgram();
-const softSPI = new SoftSPI({
-  clock: 23, // 23 pin number of SCLK
-  mosi: 19, // 19 pin number of MOSI
-  miso: 21, // 21 pin number of MISO
-  client: 24 // 24 pin number of CS
-});
-const mfrc522 = new Mfrc522(softSPI).setResetPin(22);
-
-function initiateProgram () {
-  // console.log(ip.address())
-  pinEnable.writeSync(1);
-}
-
 
 
 
