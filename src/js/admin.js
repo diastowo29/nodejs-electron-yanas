@@ -379,6 +379,7 @@ function doSaveOpeningSaldo () {
     var userRowId = $('#user_list_select').val();
     var openingSaldo = $('#opening_saldo').val();
     ipcRenderer.send('saveOpeningSaldo', userRowId, openingSaldo);
+    $("#osk-container").hide()
 }
 
 ipcRenderer.on('saveOpeningSaldo', function (event, done) {

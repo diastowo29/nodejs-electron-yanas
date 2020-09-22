@@ -9,9 +9,9 @@ const { user_table,
   session_table, 
   log_table } = require('./sequelize');
 
-const Mfrc522 = require("mfrc522-rpi");
-const SoftSPI = require("rpi-softspi");
-var Gpio = require('onoff').Gpio;
+// const Mfrc522 = require("mfrc522-rpi");
+// const SoftSPI = require("rpi-softspi");
+// var Gpio = require('onoff').Gpio;
 
 var logged_in_user = '';
 
@@ -22,102 +22,102 @@ if (require('electron-squirrel-startup')) { // eslint-disable-line global-requir
   app.quit();
 }
 
-let waitTime = 3000;
-var pinEnable = new Gpio(13, 'out');
-var pinDir = new Gpio(19, 'out');
-var pinPulse = new Gpio(21, 'out');
+// let waitTime = 3000;
+// var pinEnable = new Gpio(13, 'out');
+// var pinDir = new Gpio(19, 'out');
+// var pinPulse = new Gpio(21, 'out');
 
-initiateProgram();
-const softSPI = new SoftSPI({
-  clock: 23, // 23 pin number of SCLK
-  mosi: 19, // 19 pin number of MOSI
-  miso: 21, // 21 pin number of MISO
-  client: 24 // 24 pin number of CS
-});
-const mfrc522 = new Mfrc522(softSPI).setResetPin(22);
+// initiateProgram();
+// const softSPI = new SoftSPI({
+//   clock: 23, // 23 pin number of SCLK
+//   mosi: 19, // 19 pin number of MOSI
+//   miso: 21, // 21 pin number of MISO
+//   client: 24 // 24 pin number of CS
+// });
+// const mfrc522 = new Mfrc522(softSPI).setResetPin(22);
 
-function initiateProgram () {
-  // console.log(ip.address())
-  pinEnable.writeSync(1);
-}
+// function initiateProgram () {
+//   // console.log(ip.address())
+//   pinEnable.writeSync(1);
+// }
 
 
 /* ===== RFID AREA ===== */
 
-var rfidInterval = setInterval(startRfid, 500);
+// var rfidInterval = setInterval(startRfid, 500);
 
-function restartRfid () {
-  clearInterval(rfidInterval);
-  rfidInterval = setInterval(startRfid, 500);
-}
+// function restartRfid () {
+//   clearInterval(rfidInterval);
+//   rfidInterval = setInterval(startRfid, 500);
+// }
 
-function startRfid () {
-  mfrc522.reset();
+// function startRfid () {
+//   mfrc522.reset();
 
-  let response = mfrc522.findCard();
-  if (!response.status) {
-    console.log("No Card ");
-    return;
-  } else {
-    // CARD DETECTED - STOP SCANNING
-    clearInterval(rfidInterval);
-  }
-  console.log("Card detected, CardType: " + response.bitSize);
+//   let response = mfrc522.findCard();
+//   if (!response.status) {
+//     console.log("No Card ");
+//     return;
+//   } else {
+//     // CARD DETECTED - STOP SCANNING
+//     clearInterval(rfidInterval);
+//   }
+//   console.log("Card detected, CardType: " + response.bitSize);
 
-  response = mfrc522.getUid();
-  if (!response.status) {
-    console.log("UID Scan Error");
-    return;
-  }
-  const uid = response.data;
-  let cardID = uid.toString();
-  console.log('===== Card ID: ' + cardID);
+//   response = mfrc522.getUid();
+//   if (!response.status) {
+//     console.log("UID Scan Error");
+//     return;
+//   }
+//   const uid = response.data;
+//   let cardID = uid.toString();
+//   console.log('===== Card ID: ' + cardID);
 
-  if (!adding_new_user) {
-    user_table.findOne({
-      where: {
-        id_kartu: cardID
-      }
-    }).then(user_found => {
-      if (user_found !== null) {
-        clearInterval(rfidInterval);
-        mainWindow.webContents.send('cardUserValidate', user_found.dataValues.idlogin_kartu);
-      }
-    });
-  } else {
-    clearInterval(rfidInterval);
-    mainWindow.webContents.send('newUserCard', cardID);
-    adding_new_user = false;
-  }
+//   if (!adding_new_user) {
+//     user_table.findOne({
+//       where: {
+//         id_kartu: cardID
+//       }
+//     }).then(user_found => {
+//       if (user_found !== null) {
+//         clearInterval(rfidInterval);
+//         mainWindow.webContents.send('cardUserValidate', user_found.dataValues.idlogin_kartu);
+//       }
+//     });
+//   } else {
+//     clearInterval(rfidInterval);
+//     mainWindow.webContents.send('newUserCard', cardID);
+//     adding_new_user = false;
+//   }
 
-  //# Stop
-  mfrc522.stopCrypto();
-}
+//   //# Stop
+//   mfrc522.stopCrypto();
+// }
 
 /* ===== RFID AREA ===== */
 
 /*  ===== SONIC ===== */
-const piGpio = require('pigpio').Gpio;
-const MICROSECDONDS_PER_CM = 1e6/34321;
+// const piGpio = require('pigpio').Gpio;
+// const MICROSECDONDS_PER_CM = 1e6/34321;
 
-const trigger = new piGpio(23, {mode: Gpio.OUTPUT});
-const echo = new piGpio(24, {mode: Gpio.INPUT, alert: true});
+// const trigger = new piGpio(23, {mode: Gpio.OUTPUT});
+// const echo = new piGpio(24, {mode: Gpio.INPUT, alert: true});
 
-console.log('watch')
-trigger.digitalWrite(0);
+// console.log('watch')
+// trigger.digitalWrite(0);
 
-let startTick;
+// let startTick;
 
-echo.on('alert', (level, tick) => {
-  if (level == 1) {
-    startTick = tick;
-  } else {
-    const endTick = tick;
-    const diff = (endTick >> 0) - (startTick >> 0); // Unsigned 32 bit arithmetic
-    console.log(diff / 2 / MICROSECDONDS_PER_CM);
-    distanceLeft = diff / 2 / MICROSECDONDS_PER_CM;
-  }
-});
+// echo.on('alert', (level, tick) => {
+//   if (level == 1) {
+//     startTick = tick;
+//   } else {
+//     const endTick = tick;
+//     const diff = (endTick >> 0) - (startTick >> 0); // Unsigned 32 bit arithmetic
+//     console.log(diff / 2 / MICROSECDONDS_PER_CM);
+//     distanceLeft = diff / 2 / MICROSECDONDS_PER_CM;
+//   }
+// });
 /*  ===== SONIC ===== */
 
 
@@ -139,6 +139,10 @@ const createWindow = () => {
 
   // Open the DevTools.
   mainWindow.webContents.openDevTools();
+  
+  session_table.destroy({
+    truncate: true
+  });
 };
 
 // This method will be called when Electron has finished
@@ -161,6 +165,7 @@ app.on('activate', () => {
   if (BrowserWindow.getAllWindows().length === 0) {
     createWindow();
   }
+
 });
 
 
@@ -284,9 +289,9 @@ ipcMain.on('tarikBeras', function (event, qty) {
       if (userQuota > qtyRequest) {
         if (((userDaily + qtyRequest) <= userDailyMax) && (userWeekly + qtyRequest) <= userWeeklyMax) {
 
-          pinEnable.writeSync(0);
-          wait(925*12*qtyRequest);
-          pinEnable.writeSync(1);
+          // pinEnable.writeSync(0);
+          // wait(925*12*qtyRequest);
+          // pinEnable.writeSync(1);
 
           userDaily = userDaily + qtyRequest;
           userWeeklyMax = userWeeklyMax + qtyRequest;

@@ -49,6 +49,7 @@ function doSavePin () {
     var oldPin = $('#old_pin').val();
     var newPin = $('#new_pin').val();
     var retypeNewPin = $('#retype_pin').val();
+    $("#osk-container").hide()
 
     if (newPin != retypeNewPin) {
         $('#error_pin_match').show();
