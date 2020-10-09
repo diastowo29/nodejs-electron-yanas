@@ -6,6 +6,7 @@ module.exports = (sequelize, type) => {
           autoIncrement: true
         },
         id_kartu: type.STRING(100),
+        nomor_ktp: type.STRING(100),
         idlogin_kartu: type.STRING(100),
         nama_kartu: type.STRING(100),
         pin_kartu: type.STRING(100),

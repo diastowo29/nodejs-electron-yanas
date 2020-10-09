@@ -458,23 +458,27 @@ ipcMain.on('saveTrx', function (event, trx) {
   });
 });
 
-ipcMain.on('saveUser', function (event, user) {
+ipcMain.on('saveUser', function (event, user, new_user) {
   user_table.findAll({
     where: {
       idlogin_kartu: user.idlogin_kartu
     }
   }).then(user_table_find => {
     if (user_table_find.length > 0) {
-      user_table.update({
-        idlogin_kartu: user.idlogin_kartu,
-        nama_kartu: user.nama_kartu,
-        pin_kartu: user.pin_kartu,
-        role_kartu: user.role_kartu,
-      }, {
-        where: {
-          idlogin_kartu: user.idlogin_kartu
-        }
-      })
+      if (!new_user) {
+        user_table.update({
+          idlogin_kartu: user.idlogin_kartu,
+          nama_kartu: user.nama_kartu,
+          pin_kartu: user.pin_kartu,
+          role_kartu: user.role_kartu,
+        }, {
+          where: {
+            idlogin_kartu: user.idlogin_kartu
+          }
+        })
+      } else {
+        mainWindow.webContents.send('saveUser', false);
+      }
     } else {
       user_table.create(user).then(user_table_create => {
         mainWindow.webContents.send('saveUser', true);

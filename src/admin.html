@@ -63,7 +63,7 @@
             color: red;
         }
 
-        .error_pin_match {
+        .error_text {
             color: red;
         }
 
@@ -96,6 +96,10 @@
         </div>
         <div class="col-md-6">
             <input type="button" class="btn btn-primary main_menu float_right" name="id_login" id="id_login" value="Selesai" class="form-control" onclick="doneCLick()">
+        </div>
+        <div class="col-md-6"></div>
+        <div class="col-md-6">
+            <input type="button" class="btn btn-danger main_menu float_right" name="id_login" id="id_login" value="Shutdown" class="form-control" onclick="shutdownClick()">
         </div>
         
     	<div class="col-md-6">
@@ -205,8 +209,12 @@
                 </div>
                 <div class="modal-body">
                     <div class="col-md-12">
-                        <label for="kartu_id" class="">ID Kartu (Tempel KTP / Masukan Nomor KTP)</label>
-                        <input name="kartu_id" id="kartu_id" placeholder="3201231232334343" type="text" class="form-control">
+                        <label for="kartu_id" class="">ID Kartu (Tempel KTP)</label>
+                        <input name="kartu_id" id="kartu_id" type="text" class="form-control">
+                    </div>
+                    <div class="col-md-12">
+                        <label for="nomor_ktp" class="">Nomor KTP</label>
+                        <input name="nomor_ktp" id="nomor_ktp" type="text" class="form-control">
                     </div>
                     <div class="col-md-12">
                         <label for="user_id" class="">User ID</label>
@@ -238,6 +246,8 @@
                             <option value="Admin">Admin</option>
                             <option value="User">User</option>
                         </select>
+                        <label id="error_data" class="error_text">Data belum lengkap..</label>
+                        <label id="duplicate_data" class="error_text">Data error..</label>
                     </div>
                     <div class="col-md-3">
                         <input name="save_user" id="save_user" type="button" class="btn btn-primary last_btn" value="Save" onclick="doSaveUser()">
@@ -308,10 +318,10 @@
                         <input name="retype_pin" id="retype_pin" type="password" class="form-control">
                     </div>
                     <div class="col-md-12">
-                        <h6 id="error_pin" class="error_pin">Pin salah</h6>
+                        <h6 id="error_pin" class="error_text">Pin salah</h6>
                     </div>
                     <div class="col-md-12">
-                        <h6 id="error_pin_match" class="error_pin_match">Pin tidak sama</h6>
+                        <h6 id="error_pin_match" class="error_text">Pin tidak sama</h6>
                     </div>
                     <div class="col-md-3">
                         <input name="save_user" id="save_user" type="button" 

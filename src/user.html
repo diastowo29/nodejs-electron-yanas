@@ -68,13 +68,17 @@
             z-index: 9999 !important;
         }
 
+        .saldo_info {
+            color: white;
+        }
+
 	</style>
   </head>
   <body>
       <label style="display: none;" id="user_logged_id"></label>
     <div id="user_main_menu" class="row" style="margin-top: 100px;">
         <div class="ctn">
-    		<img src="images/yanas.png" alt="Yanas">
+            <img src="images/yanas.png" alt="Yanas">
         </div>
         <div class="col-md-6">
             <input type="button" class="btn btn-primary main_menu float_left" name="ambil_beras" id="ambil_beras" value="Ambil Beras" class="form-control" onclick="ambilBeras()">
@@ -86,13 +90,16 @@
             <input type="button" class="btn btn-primary main_menu float_left" name="ubah_pin" id="ubah_pin" value="Ubah Pin" class="form-control" onclick="ubahPin()">
         </div>
         <div class="col-md-6">
-            <input type="button" class="btn btn-primary main_menu float_right" name="selesai" id="selesai" value="Selesai" class="form-control" onclick="userSelesai()">
+            <input type="button" class="btn btn-danger main_menu float_right" name="selesai" id="selesai" value="Selesai" class="form-control" onclick="userSelesai()">
         </div>
 	</div>
 
     <div id="user_beras_menu" class="row" style="margin-top: 100px;">
         <div class="ctn">
             <img src="images/yanas.png" alt="Yanas">
+            <div>
+                <label id="saldo_info" class="saldo_info">Saldo</label>
+            </div>
         </div>
         <div class="col-md-6">
             <input type="button" class="btn btn-primary main_menu float_left" value="1 Liter" class="form-control" onclick="tarikBeras(1)">

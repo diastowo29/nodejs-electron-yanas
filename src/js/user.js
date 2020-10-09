@@ -1,19 +1,30 @@
 const remote = require('electron').remote;
 var ipcRenderer = require('electron').ipcRenderer;
 
+var USER_MAX_BERAS = 0;
+
 $('#user_beras_menu').hide();
 function ambilBeras () {
     ipcRenderer.send('ambilBeras', true);
 }
 
 ipcRenderer.on('ambilBeras', function (event, data) {
+    console.log(data)
+    USER_MAX_BERAS = data.dataValues.max_beras;
+    $('#saldo_info').text('Saldo anda: ' + USER_MAX_BERAS + ' Liter')
 	$('#user_main_menu').hide();
 	$('#user_beras_menu').show();
 })
 
 function tarikBeras (qty) {
+    console.log(USER_MAX_BERAS)
     console.log(qty)
-    ipcRenderer.send('tarikBeras', qty);
+
+    if (USER_MAX_BERAS < qty) {
+        alert('Saldo anda tidak cukup');
+    } else {
+        ipcRenderer.send('tarikBeras', qty);
+    }
 }
 
 ipcRenderer.on('tarikBerasDone', function(event, berasDone) {

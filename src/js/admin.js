@@ -5,6 +5,8 @@ $('#admin_main_menu').show();
 $('#user_menu').hide();
 $('#trx_menu').hide();
 
+var IS_NEW_USER = true;
+
 function getUserList () {
     ipcRenderer.send('getUserList', true);
 }
@@ -201,6 +203,7 @@ ipcRenderer.on('showTrx', function (event, trxList) {
 });
 
 function doNewUser () {
+    IS_NEW_USER = true;
     $('#user_pin').prop("disabled", false);
     $('#user_repin').prop("disabled", false);
     $('#user_id').val('');
@@ -213,6 +216,8 @@ function doNewUser () {
     $('#user_max_beras_periode').val('');
     ipcRenderer.send('addingNewUser', true);
     $('#userModal').modal('show');
+    $('#duplicate_data').hide();
+    $('#error_data').hide();
 }
 
 ipcRenderer.on('newUserCard', function(event, idKartu) {
@@ -220,19 +225,36 @@ ipcRenderer.on('newUserCard', function(event, idKartu) {
 })
 
 function doSaveUser () {
-    let idlogin_kartu = $('#user_id').val();
+    let kartu_id = $('#kartu_id').val();
+    let nomor_ktp = $('#nomor_ktp').val();
+    
+    let user_id = $('#user_id').val();
     let nama_kartu = $('#nama').val();
     let pin_kartu = $('#user_pin').val();
+    
     let user_repin = $('#user_repin').val();
+    
     let role_kartu = $('#user_type').val();
-    let newUser = {
-        id_kartu: '01010101',
-        idlogin_kartu: idlogin_kartu,
-        nama_kartu: nama_kartu,
-        pin_kartu: pin_kartu,
-        role_kartu: role_kartu
+
+    let max_beras_h = $('#user_max_beras_h').val();
+    let max_beras_periode = $('#user_max_beras_periode').val();
+
+    if (kartu_id == '' || nomor_ktp == '' || user_id == '' || nama_kartu == '' 
+    || pin_kartu == '' || user_repin == '' || role_kartu === null || max_beras_h == '' || max_beras_periode == '') {
+        $('#error_data').show();
+    } else {
+        $('#error_data').hide();
+        let newUser = {
+            id_kartu: kartu_id,
+            idlogin_kartu: user_id,
+            nama_kartu: nama_kartu,
+            pin_kartu: pin_kartu,
+            role_kartu: role_kartu
+        }
+        ipcRenderer.send('saveUser', newUser, IS_NEW_USER);
     }
-    ipcRenderer.send('saveUser', newUser);
+    
+
 }
 
 function doFindUser () {
@@ -241,6 +263,7 @@ function doFindUser () {
 }
 
 function doEditUser (id) {
+    IS_NEW_USER = false;
     ipcRenderer.send('editUser', id);
 }
 
@@ -259,6 +282,10 @@ ipcRenderer.on('deleteUser', function (event, deleted) {
     }
 })
 
+function shutdownClick() {
+    remote.getCurrentWindow().close()
+}
+
 ipcRenderer.on('editUser', function (event, userList) {
     $('#user_id').val(userList[0].dataValues.idlogin_kartu);
     $('#nama').val(userList[0].dataValues.nama_kartu);
@@ -273,12 +300,17 @@ ipcRenderer.on('editUser', function (event, userList) {
     $('#user_max_beras_h').val(userList[0].dataValues.max_beras_hari);
     $('#user_max_beras_periode').val(userList[0].dataValues.max_beras_periode_l);
     $('#userModal').modal('show');
+    $('#duplicate_data').hide();
+    $('#error_data').hide();
 })
 
 ipcRenderer.on('saveUser', function (event, done) {
+    $('#duplicate_data').hide();
     if (done) {
         $('#userModal').modal('hide');
         userClick();
+    } else {
+        $('#duplicate_data').show();
     }
 })
 
